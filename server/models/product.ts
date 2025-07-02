@@ -4,19 +4,24 @@ export interface IProduct extends Document {
     name: string;
     category: 'Pesticide' | 'Seed' | 'Fertilizer' | 'Other';
     company: mongoose.Types.ObjectId;
+    batchNumber: string
     description?: string;
     price: number;
-    // soldQuantity: number;
-    // remainingStock: number;
+    costPrice: number;
+    sellingPrice: number;
+    soldQuantity: number;
+    remainingStock: number;
     stock: number;
+    mrp: number;
     unit?: 'kg' | 'liter' | 'packet' | 'unit';
+    manufactureDate: Date;
     expiryDate: Date;
     supplier?: mongoose.Types.ObjectId;
     createdAt?: Date;
     updatedAt?: Date;
     status?: string;
     isDeleted?: Boolean,
-    isBlock?: Boolean, batchNumber: String,
+    isBlock?: Boolean,
 }
 
 const ProductSchema: Schema<IProduct> = new Schema(
@@ -49,8 +54,12 @@ const ProductSchema: Schema<IProduct> = new Schema(
             type: String,
             required: true
         },
-        // soldQuantity: { type: Number, default: 0 },
-        // remainingStock: { type: Number, default: 0 },
+        mrp: { type: Number, required: true },
+        sellingPrice: { type: Number, required: true },
+        costPrice: { type: Number, required: true },
+        manufactureDate: { type: Date, required: true },
+        soldQuantity: { type: Number, default: 0 },
+        remainingStock: { type: Number, default: 0 },
         expiryDate: { type: Date, required: true },
 
         supplier: {

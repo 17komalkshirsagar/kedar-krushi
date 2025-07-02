@@ -15,4 +15,16 @@ export interface IProduct {
     updatedAt?: string;
     category?: 'Pesticide' | 'Seed' | 'Fertilizer' | 'Other';
     batchNumber?: string
+    costPrice: number;
+    sellingPrice: number;
+    mrp: number;
+    remainingStock: number;
+    soldQuantity: number;
+    manufactureDate?: Date;
+
+    isDeleted?: boolean;
+    isBlock?: boolean;
+
 }
+
+

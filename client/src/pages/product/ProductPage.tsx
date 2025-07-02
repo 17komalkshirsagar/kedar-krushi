@@ -36,7 +36,21 @@ const productSchema = z.object({
     expiryDate: z.coerce.date(),
     supplier: z.string().optional(),
     status: z.enum(['active', 'inactive', 'blocked']).optional(),
-    batchNumber: z.string().min(1, { message: 'Batch number is required' })
+    batchNumber: z.string().min(1, { message: 'Batch number is required' }),
+    costPrice: z.string().refine((val) => !isNaN(Number(val)), {
+        message: 'Cost price must be a valid number',
+    }).optional(),
+
+    mrp: z.string().refine((val) => !isNaN(Number(val)), {
+        message: 'MRP must be a valid number',
+    }).optional(),
+
+    sellingPrice: z.string().refine((val) => !isNaN(Number(val)), {
+        message: 'Selling price must be a valid number',
+    }).optional(),
+
+    manufactureDate: z.coerce.date().optional(),
+
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
@@ -47,6 +61,9 @@ const defaultValues: ProductFormData = {
     company: '',
     description: '',
     price: '',
+    costPrice: '',
+    sellingPrice: '',
+    mrp: '',
     stock: '',
     unit: 'kg',
     expiryDate: new Date(),
@@ -86,6 +103,9 @@ const ProductPage = () => {
                 company: (productData.company as any)?._id ?? '',
                 description: productData.description ?? '',
                 price: productData.price?.toString() ?? '',
+                costPrice: productData.costPrice?.toString() ?? '',
+                sellingPrice: productData.sellingPrice?.toString() ?? '',
+                mrp: productData.mrp?.toString() ?? '',
                 stock: productData.stock?.toString() ?? '',
                 unit: productData.unit ?? 'kg',
                 expiryDate: ((productData.expiryDate as any)?.split?.('T')[0]) ?? '',
@@ -98,9 +118,7 @@ const ProductPage = () => {
         }
     }, [id, productData, companyData, data, reset]);
 
-    console.log('ProductData:', productData);
-    console.log('CompanyData:', companyData?.result);
-    console.log('SupplierData:', data?.result);
+
 
     useEffect(() => {
         if (isAddSuccess) {
@@ -127,6 +145,9 @@ const ProductPage = () => {
             ...data,
             price: data.price.toString(),
             stock: data.stock.toString(),
+            costPrice: data.costPrice?.toString(),
+            sellingPrice: data.sellingPrice?.toString(),
+            mrp: data.mrp?.toString(),
         };
 
         if (id) {
@@ -216,6 +237,20 @@ const ProductPage = () => {
                             </div>
                         </div>
 
+                        <div className='flex gap-4'>
+                            <div className="w-1/2">
+                                <Label htmlFor="manufactureDate">Manufacture Date</Label>
+                                <Input id="manufactureDate" type="date" {...register('manufactureDate')} />
+                            </div>
+                            <div className="w-1/2">
+                                <Label htmlFor="expiryDate">Expiry Date</Label>
+                                <Input id="expiryDate" type="date" {...register('expiryDate')} />
+                                {errors.expiryDate && <p className="text-red-500 text-sm">{errors.expiryDate.message}</p>}
+                            </div>
+
+                        </div>
+
+
                         <div className="flex gap-4">
                             <div className="w-1/2">
                                 <Label htmlFor="unit">Unit</Label>
@@ -227,12 +262,41 @@ const ProductPage = () => {
                                 </select>
                             </div>
                             <div className="w-1/2">
-                                <Label htmlFor="expiryDate">Expiry Date</Label>
-                                <Input id="expiryDate" type="date" {...register('expiryDate')} />
-                                {errors.expiryDate && <p className="text-red-500 text-sm">{errors.expiryDate.message}</p>}
+                                <Label htmlFor="mrp">MRP</Label>
+                                <Input
+                                    id="mrp"
+                                    type="number"
+                                    {...register('mrp')}
+                                    onChange={(e) => setValue('mrp', e.target.value)}
+                                />
+                                {errors.mrp && <p className="text-red-500 text-sm">{errors.mrp.message}</p>}
                             </div>
+
                         </div>
 
+                        <div className='flex gap-4'>
+                            <div className="w-1/2">
+                                <Label htmlFor="costPrice">Cost Price</Label>
+                                <Input
+                                    id="costPrice"
+                                    type="number"
+                                    {...register('costPrice')}
+                                    onChange={(e) => setValue('costPrice', e.target.value)}
+                                />
+                                {errors.costPrice && <p className="text-red-500 text-sm">{errors.costPrice.message}</p>}
+                            </div>
+                            <div className="w-1/2">
+                                <Label htmlFor="sellingPrice">Selling Price</Label>
+                                <Input
+                                    id="sellingPrice"
+                                    type="number"
+                                    {...register('sellingPrice')}
+                                    onChange={(e) => setValue('sellingPrice', e.target.value)}
+                                />
+                                {errors.sellingPrice && <p className="text-red-500 text-sm">{errors.sellingPrice.message}</p>}
+                            </div>
+
+                        </div>
                         <div className="flex gap-4">
                             <div className="w-1/2">
                                 <Label htmlFor="supplier">Supplier</Label>

@@ -6,18 +6,7 @@ import { invalidateCache } from "../utils/redisMiddleware";
 import { createProductRules } from "../rules/product.rules";
 import { Product } from "../models/product";
 
-// Create Product
-// export const createProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-//     const data = req.body;
-//     // const { isError, error } = customValidator(data, createProductRules);
 
-//     // if (isError) return res.status(422).json({ message: "Validation Error", error });
-
-//     const result = await Product.create(data);
-//     invalidateCache("products:*");
-
-//     res.status(200).json({ message: "Product created successfully", result });
-// });
 
 export const createProduct = asyncHandler(async (req: Request, res: Response): Promise<any> => {
     const data = req.body;
@@ -28,6 +17,7 @@ export const createProduct = asyncHandler(async (req: Request, res: Response): P
     if (existingProduct) {
         const addedStock = Number(stock);
         existingProduct.stock += addedStock;
+        existingProduct.remainingStock += addedStock;
         await existingProduct.save();
 
         await invalidateCache("products:*")
@@ -38,7 +28,7 @@ export const createProduct = asyncHandler(async (req: Request, res: Response): P
 
     const newData = {
         ...data,
-        stock: Number(stock),
+        stock: Number(stock), remainingStock: Number(stock)
     };
 
     const result = await Product.create(newData);
@@ -48,83 +38,55 @@ export const createProduct = asyncHandler(async (req: Request, res: Response): P
 });
 
 
-// export const getProducts = asyncHandler(async (req: Request, res: Response): Promise<any> => {
-//     const { page = 1, limit = 10, searchQuery = "" } = req.query;
-
-//     const cacheKey = `products:page=${page}&limit=${limit}&search=${searchQuery}`;
-//     const cachedData = await redisClient.get(cacheKey);
-
-//     if (cachedData) {
-//         return res.status(200).json(JSON.parse(cachedData));
-//     }
-
-//     const currentPage = parseInt(page as string);
-//     const pageLimit = parseInt(limit as string);
-//     const skip = (currentPage - 1) * pageLimit;
-
-//     const query: any = {
-//         isDeleted: false,
-//         ...(req.query.isBlock !== undefined && { isBlock: req.query.isBlock === "true" }),
-//         ...(searchQuery && {
-//             $or: [
-//                 { name: { $regex: searchQuery, $options: "i" } },
-//                 { description: { $regex: searchQuery, $options: "i" } },
-//             ]
-//         })
-//     };
-
-//     const totalEntries = await Product.countDocuments(query);
-//     const totalPages = Math.ceil(totalEntries / pageLimit);
-
-//     const result = await Product.find(query)
-//         .sort({ createdAt: -1 })
-//         .skip(skip)
-//         .limit(pageLimit)
-//         .populate("company")
-//         .populate("supplier")
-//         .lean();
-
-//     const pagination = { page: currentPage, limit: pageLimit, totalEntries, totalPages };
-//     await redisClient.setex(cacheKey, 15, JSON.stringify({
-//         message: "Products fetched successfully",
-//         result,
-//         pagination
-//     }));
-
-//     res.status(200).json({ message: "Products fetched successfully", result, pagination });
-// });
 
 
 export const getProducts = asyncHandler(async (req: Request, res: Response): Promise<any> => {
-    const { page = 1, limit = 10, searchQuery = "" } = req.query;
+    const {
+        page = 1, limit = 10, searchQuery = "", status, category, isBlock, } = req.query;
 
-    const currentPage = parseInt(page as string);
-    const pageLimit = parseInt(limit as string);
+    const currentPage = parseInt(page as string, 10);
+    const pageLimit = parseInt(limit as string, 10);
     const skip = (currentPage - 1) * pageLimit;
 
     const query: any = {
         isDeleted: false,
-        ...(req.query.isBlock !== undefined && { isBlock: req.query.isBlock === "true" }),
+        ...(isBlock !== undefined && { isBlock: isBlock === "true" }),
+        ...(status && { status }),
+        ...(category && { category }),
         ...(searchQuery && {
             $or: [
                 { name: { $regex: searchQuery, $options: "i" } },
                 { description: { $regex: searchQuery, $options: "i" } },
+                { batchNumber: { $regex: searchQuery, $options: "i" } },
+                { unit: { $regex: searchQuery, $options: "i" } },
+                { status: { $regex: searchQuery, $options: "i" } },
             ]
-        })
+        }),
     };
 
     const totalEntries = await Product.countDocuments(query);
     const totalPages = Math.ceil(totalEntries / pageLimit);
 
     const result = await Product.find(query)
-        .sort({ createdAt: -1 }).skip(skip).limit(pageLimit).populate("company").populate("supplier").lean();
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(pageLimit)
+        .populate("company")
+        .populate("supplier")
+        .lean();
 
     const pagination = {
-        page: currentPage, limit: pageLimit, totalEntries, totalPages
+        page: currentPage,
+        limit: pageLimit,
+        totalEntries,
+        totalPages,
     };
 
-    res.status(200).json({ message: "Products fetched successfully", result, pagination });
+    res.status(200).json({
+        message: "Products fetched successfully", result, pagination,
+    });
 });
+
 
 
 // Get Product By ID

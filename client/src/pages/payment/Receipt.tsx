@@ -418,6 +418,10 @@ const Receipt = ({
       <td style="font-weight: bold;">एकूण</td>
       <td style="font-weight: bold;">₹${payment?.totalAmount ?? 0}/-</td>
     </tr>
+    <tr>
+  <td colspan="7" style="text-align: right; font-weight: bold; color: red;">बाकी</td>
+  <td style="font-weight: bold; color: red;">₹${payment?.pendingAmount ?? 0}/-</td>
+</tr>
   </tbody>
 </table>
 

@@ -97,6 +97,11 @@ const ProductTable = () => {
             cell: (info) => info.getValue(),
         },
         {
+            accessorKey: 'remainingStock',
+            header: 'RemainingStock',
+            cell: (info) => info.getValue(),
+        },
+        {
             accessorKey: 'status',
             header: 'Status',
             cell: ({ row }) => {
