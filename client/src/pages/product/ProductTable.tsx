@@ -60,7 +60,7 @@ const ProductTable = () => {
     const columns: ColumnDef<any>[] = [
         {
             accessorKey: 'name',
-            header: 'Product Name',
+            header: () => <span title="Product Name">P.Name</span>,
             cell: (info) => info.getValue(),
         },
         {
@@ -87,20 +87,63 @@ const ProductTable = () => {
             cell: (info) => `₹${info.getValue()}`,
         },
         {
+            accessorKey: 'remainingStock',
+            header: () => <span title="Remaining Stock">R.Stock</span>,
+            cell: (info) => info.getValue(),
+        },
+        {
             accessorKey: 'stock',
             header: 'Stock',
             cell: (info) => info.getValue(),
         },
         {
             accessorKey: 'batchNumber',
-            header: 'Batch',
+            header: () => (<span title="Batch Number">Batch</span>),
+
             cell: (info) => info.getValue(),
         },
         {
-            accessorKey: 'remainingStock',
-            header: 'RemainingStock',
+            accessorKey: 'sellingPrice',
+            header: () => (<span title="Selling Price">S.Price</span>),
             cell: (info) => info.getValue(),
         },
+        {
+            accessorKey: 'mrp',
+            header: 'MRP',
+            cell: (info) => info.getValue(),
+        },
+        {
+            accessorKey: 'manufactureDate',
+            header: () => (<span title="Manufacture Date">MFD</span>),
+            cell: (info) => {
+                const rawDate = info.getValue() as string;
+                const date = new Date(rawDate);
+                return date.toLocaleDateString('en-GB');
+            },
+        },
+
+        {
+            accessorKey: 'expiryDate',
+            header: () => <span title="Expiry Date">Ex</span>,
+            cell: (info) => {
+                const rawDate = info.getValue() as string;
+                const date = new Date(rawDate);
+                return date.toLocaleDateString('en-GB');
+            },
+        },
+
+
+        {
+            accessorKey: 'costPrice',
+            header: () => <span title="Cost Price">C.Price</span>,
+            cell: (info) => info.getValue(),
+        },
+        {
+            accessorKey: 'soldQuantity',
+            header: () => <span title="Sold Quantity">SQ</span>,
+            cell: (info) => info.getValue(),
+        },
+
         {
             accessorKey: 'status',
             header: 'Status',
