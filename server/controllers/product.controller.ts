@@ -33,10 +33,7 @@ export const createProduct = asyncHandler(async (req: Request, res: Response): P
         await invalidateCache("products:*")
             ;
 
-        return res.status(200).json({
-            message: "Stock updated for existing product",
-            result: existingProduct,
-        });
+        return res.status(200).json({ message: "Stock updated for existing product", result: existingProduct, });
     }
 
     const newData = {
@@ -46,13 +43,8 @@ export const createProduct = asyncHandler(async (req: Request, res: Response): P
 
     const result = await Product.create(newData);
 
-    await invalidateCache("products:*")
-        ;
-
-    res.status(201).json({
-        message: "New product created successfully",
-        result,
-    });
+    await invalidateCache("products:*");
+    res.status(201).json({ message: "New product created successfully", result, });
 });
 
 

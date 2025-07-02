@@ -56,7 +56,6 @@ const NotificationPage = () => {
         skip: !selectedCustomerId,
     });
 
-    // Fill form if editing
     useEffect(() => {
         if (id && notificationData) {
             reset({
@@ -67,6 +66,35 @@ const NotificationPage = () => {
             });
         }
     }, [id, notificationData, reset]);
+
+    // useEffect(() => {
+    //     if (selectedCustomerId && customers?.result && history) {
+    //         const selectedCustomer = customers.result.find((cust: any) => cust._id === selectedCustomerId);
+    //         const customerName = selectedCustomer?.name || '';
+    //         const mobile = selectedCustomer?.mobile || '';
+    //         setSelectedCustomerMobile(mobile);
+
+    //         const totals = history.totals || { totalAmount: 0, paidAmount: 0, pendingAmount: 0 };
+    //         const purchaseInfo = history.purchaseInfo || {};
+    //         const purchaseCount = history.result?.length || 0;
+
+    //         const productSet = new Set<string>();
+    //         history.result?.forEach((p: any) => {
+    //             p.products.forEach((prod: any) => productSet.add(prod.product.name));
+    //         });
+
+    //         const productNames = Array.from(productSet).join(', ');
+
+    //         const message = `प्रिय ${customerName},\n\nकेदार कृषी सेवा तर्फे नम्र विनंती आहे की आपण आपले शिल्लक रक्कम लवकरात लवकर भरावी. आपण केदार कृषी सेवा कडून ${purchaseInfo.firstDate || '---'} ते ${purchaseInfo.lastDate || '---'} दरम्यान खरेदी केली आहे. आपली एकूण खरेदी रक्कम ₹${totals.totalAmount} असून यापैकी ₹${totals.paidAmount} भरले असून ₹${totals.pendingAmount} शिल्लक आहे.\n\nआपण एकूण ${purchaseCount} बिल झालेले आहेत. खरेदी उत्पादने: ${productNames}.\n\nकृपया आपली थकबाकी रक्कम लवकरात लवकर भरा.\n\nधन्यवाद!\nकेदार कृषी सेवा`;
+
+    //         reset({
+    //             ...getValues(),
+    //             customer: selectedCustomerId,
+    //             message,
+    //         });
+    //     }
+    // }, [selectedCustomerId, customers, history, reset]);
+
 
     useEffect(() => {
         if (selectedCustomerId && customers?.result && history) {
@@ -79,12 +107,24 @@ const NotificationPage = () => {
             const purchaseInfo = history.purchaseInfo || {};
             const purchaseCount = history.result?.length || 0;
 
-            const productSet = new Set<string>();
-            history.result?.forEach((p: any) => {
-                p.products.forEach((prod: any) => productSet.add(prod.product.name));
+            const productDetails: string[] = [];
+
+            history.result?.forEach((purchase: any) => {
+                const rawDate = purchase.date || purchase.createdAt;
+                const purchaseDate = rawDate
+                    ? new Intl.DateTimeFormat('en-IN', {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric',
+                    }).format(new Date(rawDate))
+                    : '---';
+
+                purchase.products.forEach((prod: any) => {
+                    productDetails.push(`${prod.product.name} (${purchaseDate})`);
+                });
             });
 
-            const productNames = Array.from(productSet).join(', ');
+            const productNames = productDetails.join(', ');
 
             const message = `प्रिय ${customerName},\n\nकेदार कृषी सेवा तर्फे नम्र विनंती आहे की आपण आपले शिल्लक रक्कम लवकरात लवकर भरावी. आपण केदार कृषी सेवा कडून ${purchaseInfo.firstDate || '---'} ते ${purchaseInfo.lastDate || '---'} दरम्यान खरेदी केली आहे. आपली एकूण खरेदी रक्कम ₹${totals.totalAmount} असून यापैकी ₹${totals.paidAmount} भरले असून ₹${totals.pendingAmount} शिल्लक आहे.\n\nआपण एकूण ${purchaseCount} बिल झालेले आहेत. खरेदी उत्पादने: ${productNames}.\n\nकृपया आपली थकबाकी रक्कम लवकरात लवकर भरा.\n\nधन्यवाद!\nकेदार कृषी सेवा`;
 
@@ -95,6 +135,7 @@ const NotificationPage = () => {
             });
         }
     }, [selectedCustomerId, customers, history, reset]);
+
 
     useEffect(() => {
         if (!id && !locationCustomerId) {
