@@ -14,7 +14,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/ca
 import { useGetAllCustomersQuery } from '../../redux/apis/customer.api';
 import { useGetAllProductsQuery } from '../../redux/apis/product.api';
 import { useCreatePaymentMutation } from '../../redux/apis/payment.api';
-
+import Loader from '../../components/ui/Loader';
 import { useRef } from "react";
 import Receipt from './Receipt';
 import {
@@ -26,6 +26,11 @@ import {
     DialogDescription,
     DialogFooter,
 } from "../../components/ui/dialog";
+
+
+
+
+
 
 const paymentSchema = z.object({
     customerId: z.string().nonempty("Customer is required"),
@@ -59,7 +64,7 @@ const PaymentPage = () => {
 
     const { data: products, refetch } = useGetAllProductsQuery({});
 
-    const [createPayment, { isSuccess: isAddSuccess, isError }] = useCreatePaymentMutation();
+    const [createPayment, { isSuccess: isAddSuccess, isError, isLoading }] = useCreatePaymentMutation();
     const searchMobileRef = useRef<HTMLInputElement>(null);
     const searchProductRef = useRef<HTMLInputElement>(null);
 
@@ -121,35 +126,7 @@ const PaymentPage = () => {
 
 
 
-    // const onSubmit = (data: any) => {
-    //     const totalAmount = data.products.reduce((sum: any, item: any) => {
-    //         const product = getProductDetails(item.productId);
-    //         return sum + (product?.price || 0) * item.quantity;
-    //     }, 0);
 
-    //     const pendingAmount = totalAmount - data.paidAmount;
-
-    //     createPayment({
-    //         customer: data.customerId,
-    //         products: data.products.map((p: any) => ({
-    //             product: p.productId,
-    //             quantity: p.quantity,
-    //             price: getProductDetails(p.productId)?.price || 0
-    //         })),
-    //         totalAmount: totalAmount.toString(),
-    //         paidAmount: data.paidAmount.toString(),
-    //         pendingAmount: pendingAmount.toString(),
-    //         paymentMode: data.paymentMode,
-    //         paymentStatus:
-    //             data.paidAmount === totalAmount
-    //                 ? 'Paid'
-    //                 : data.paidAmount === 0
-    //                     ? 'Unpaid'
-    //                     : 'Partial'
-    //     });
-
-
-    // };
     const onSubmit = async (data: any) => {
         const totalAmount = data.products.reduce((sum: any, item: any) => {
             const product = getProductDetails(item.productId);
@@ -253,7 +230,7 @@ const PaymentPage = () => {
 
         }
     }, [isError,]);
-
+    if (isLoading) return <Loader />;
     return (
         <Card className="max-w-4xl mx-auto mt-5 p-4">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4 text-center">

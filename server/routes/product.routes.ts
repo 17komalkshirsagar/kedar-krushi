@@ -11,5 +11,5 @@ productRouter
     .delete("/product-delete/:id", productController.deleteProduct)
     .patch("/product/status/:id", productController.updateProductStatus)
     .patch("/product/block/:id", productController.blockProduct)
-
+    .get("/products/stats", productController.getProductStats);
 export default productRouter;

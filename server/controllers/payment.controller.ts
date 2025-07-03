@@ -23,9 +23,11 @@ export const createPayment = asyncHandler(async (req: Request, res: Response, ne
             return res.status(400).json({ error: `Insufficient remainingStock for ${product.name}. Available: ${product.remainingStock}` });
         }
         product.remainingStock -= item.quantity;
+        product.soldQuantity = (product.soldQuantity || 0) + item.quantity;
         await product.save();
     }
     // await invalidateCache("products:*");
+
 
     await invalidateCache("*product*")
     const result = await Payment.create(data);

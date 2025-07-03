@@ -95,6 +95,19 @@ export const productApi = createApi({
             transformErrorResponse: (error: { status: number; data: { message: string } }) => error.data?.message,
             invalidatesTags: ["Product"],
         }),
+        getProductStats: builder.query<
+            { message: string; result: any[] },
+            string
+        >({
+            query: (type) => ({
+                url: `/products/stats`,
+                method: "GET",
+                params: { type },
+            }),
+            transformResponse: (data: { message: string; result: any[] }) => data,
+            transformErrorResponse: (error: { status: number; data: { message: string } }) =>
+                error.data?.message,
+        }),
 
     }),
 });
@@ -106,5 +119,5 @@ export const {
     useUpdateProductMutation,
     useDeleteProductMutation,
     useUpdateProductStatusMutation,
-    useBlockProductMutation, useSellProductMutation
+    useBlockProductMutation, useSellProductMutation, useGetProductStatsQuery,
 } = productApi;

@@ -5,7 +5,7 @@ import redisClient from "../services/redisClient";
 import { invalidateCache } from "../utils/redisMiddleware";
 import { createProductRules } from "../rules/product.rules";
 import { Product } from "../models/product";
-
+import { startOfWeek, endOfWeek, startOfMonth, endOfMonth } from "date-fns";
 
 
 export const createProduct = asyncHandler(async (req: Request, res: Response): Promise<any> => {
@@ -196,3 +196,49 @@ export const blockProduct = asyncHandler(async (req: Request, res: Response): Pr
     });
 });
 
+
+
+
+
+
+export const getProductStats = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const { type = "monthly" } = req.query;
+
+    let startDate: Date;
+    let endDate: Date = new Date();
+
+    if (type === "weekly") {
+        startDate = startOfWeek(new Date());
+        endDate = endOfWeek(new Date());
+    } else if (type === "monthly") {
+        startDate = startOfMonth(new Date());
+        endDate = endOfMonth(new Date());
+    } else {
+        startDate = new Date(new Date().getFullYear(), 0, 1);
+    }
+
+    const result = await Product.aggregate([
+        {
+            $match: {
+                createdAt: { $gte: startDate, $lte: endDate },
+                isDeleted: false,
+            },
+        },
+        {
+            $group: {
+                _id: {
+                    $dateToString: {
+                        format: type === "weekly" ? "%Y-%m-%d" : "%Y-%m",
+                        date: "$createdAt",
+                    },
+                },
+                totalProducts: { $sum: 1 },
+                totalSoldQuantity: { $sum: "$soldQuantity" },
+                totalStock: { $sum: "$stock" },
+            },
+        },
+        { $sort: { _id: 1 } },
+    ]);
+
+    res.status(200).json({ message: "Stats fetched", result });
+});

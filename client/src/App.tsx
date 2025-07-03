@@ -8,6 +8,7 @@ import Receipt from './pages/payment/Receipt';
 import CustomerHistory from './pages/customer/CustomerHistory';
 import BatchTable from './pages/batch/BatchTable';
 import BatchPage from './pages/batch/BatchPage';
+import Dashboard from './pages/dasboard/Dashboard';
 
 const Loader = () => (
   <div className="flex justify-center items-center h-screen">
@@ -65,6 +66,9 @@ const App = () => {
         <Route path="/batch-page" element={<BatchPage />} />
         <Route path="/batch-page/:id" element={<BatchPage />} />
         <Route path="/customer-history/:customerId" element={<CustomerHistory />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+
+
         <Route path="*" element={<p className="text-center mt-10 text-red-500">404 - Page Not Found</p>} />
       </Routes>
     </Suspense>

@@ -108,7 +108,7 @@ export const deleteCompany = asyncHandler(async (req: Request, res: Response, ne
 
     const result = await Company.findById(id);
     if (!result || result.isDeleted) {
-        return res.status(404).json({ message: "Company not found" });
+        return res.status(409).json({ message: "Company not found" });
     }
 
     await Company.findByIdAndUpdate(id, { isDeleted: true });

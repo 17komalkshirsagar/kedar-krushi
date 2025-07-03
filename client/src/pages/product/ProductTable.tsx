@@ -87,15 +87,35 @@ const ProductTable = () => {
             cell: (info) => `₹${info.getValue()}`,
         },
         {
-            accessorKey: 'remainingStock',
-            header: () => <span title="Remaining Stock">R.Stock</span>,
-            cell: (info) => info.getValue(),
-        },
-        {
             accessorKey: 'stock',
             header: 'Stock',
             cell: (info) => info.getValue(),
         },
+        {
+            accessorKey: 'soldQuantity',
+            header: () => <span title="Sold Quantity">SQ</span>,
+            cell: (info) => info.getValue(),
+        },
+        {
+            accessorKey: 'remainingStock',
+            header: () => <span title="Remaining Stock">R.Stock</span>,
+            cell: (info) => {
+                const value = info.getValue() as number;
+                const isLowStock = value <= 10;
+                return (
+                    <span
+                        className={`font-bold px-2 py-1 rounded-md ${isLowStock
+                            ? 'bg-red-100 text-red-700 animate-pulse'
+                            : 'text-gray-350'
+                            }`}
+                    >
+                        {value}
+                    </span>
+                );
+            },
+        },
+
+
         {
             accessorKey: 'batchNumber',
             header: () => (<span title="Batch Number">Batch</span>),
@@ -138,11 +158,7 @@ const ProductTable = () => {
             header: () => <span title="Cost Price">C.Price</span>,
             cell: (info) => info.getValue(),
         },
-        {
-            accessorKey: 'soldQuantity',
-            header: () => <span title="Sold Quantity">SQ</span>,
-            cell: (info) => info.getValue(),
-        },
+
 
         {
             accessorKey: 'status',

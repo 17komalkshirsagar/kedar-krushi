@@ -21,6 +21,19 @@ import { useGetAllSuppliersQuery } from '../../redux/apis/supplier.api';
 import { useGetAllCompaniesQuery } from '../../redux/apis/company.api';
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 const productSchema = z.object({
     name: z.string().min(1),
     category: z.enum(['Pesticide', 'Seed', 'Fertilizer', 'Other']),
