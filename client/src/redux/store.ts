@@ -10,6 +10,7 @@ import { customerApi } from "./apis/customer.api";
 import { productApi } from "./apis/product.api";
 import { authApi } from "./apis/auth.api";
 import { batchApi } from "./apis/batch.api";
+import { paymentInstallmentApi } from "./apis/paymentInstallment.api";
 
 
 
@@ -26,6 +27,7 @@ const reduxStore = configureStore({
     [customerApi.reducerPath]: customerApi.reducer,
     [productApi.reducerPath]: productApi.reducer,
     [batchApi.reducerPath]: batchApi.reducer,
+    [paymentInstallmentApi.reducerPath]: paymentInstallmentApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
 
     auth: authSlice,
@@ -36,6 +38,7 @@ const reduxStore = configureStore({
       employeeApi.middleware,
       deliveryApi.middleware,
       customerApi.middleware,
+      paymentInstallmentApi.middleware,
       batchApi.middleware,
       productApi.middleware,
       supplierApi.middleware,

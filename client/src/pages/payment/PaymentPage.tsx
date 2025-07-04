@@ -13,7 +13,7 @@ import { Button } from '../../components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { useGetAllCustomersQuery } from '../../redux/apis/customer.api';
 import { useGetAllProductsQuery } from '../../redux/apis/product.api';
-import { useCreatePaymentMutation } from '../../redux/apis/payment.api';
+import { useCreatePaymentMutation, } from '../../redux/apis/payment.api';
 import Loader from '../../components/ui/Loader';
 import { useRef } from "react";
 import Receipt from './Receipt';
@@ -26,6 +26,7 @@ import {
     DialogDescription,
     DialogFooter,
 } from "../../components/ui/dialog";
+
 
 
 
@@ -63,6 +64,7 @@ const PaymentPage = () => {
     const [receiptData, setReceiptData] = useState<any>(null);
 
     const { data: products, refetch } = useGetAllProductsQuery({});
+
 
     const [createPayment, { isSuccess: isAddSuccess, isError, isLoading }] = useCreatePaymentMutation();
     const searchMobileRef = useRef<HTMLInputElement>(null);

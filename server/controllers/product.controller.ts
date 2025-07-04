@@ -8,7 +8,7 @@ import { Product } from "../models/product";
 import { startOfWeek, endOfWeek, startOfMonth, endOfMonth } from "date-fns";
 
 
-export const createProduct = asyncHandler(async (req: Request, res: Response): Promise<any> => {
+export const createProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const data = req.body;
     const { name, company, batchNumber, stock } = data;
 
@@ -40,7 +40,7 @@ export const createProduct = asyncHandler(async (req: Request, res: Response): P
 
 
 
-export const getProducts = asyncHandler(async (req: Request, res: Response): Promise<any> => {
+export const getProducts = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const {
         page = 1, limit = 10, searchQuery = "", status, category, isBlock, } = req.query;
 
@@ -114,7 +114,7 @@ export const updateProduct = asyncHandler(async (req: Request, res: Response, ne
 
     const product = await Product.findById(id);
     if (!product || product.isDeleted) {
-        return res.status(404).json({ message: "Product not found" });
+        return res.status(409).json({ message: "Product not found" });
     }
 
     if (product.isBlock) {
@@ -136,7 +136,7 @@ export const deleteProduct = asyncHandler(async (req: Request, res: Response, ne
 
     const product = await Product.findById(id);
     if (!product || product.isDeleted) {
-        return res.status(404).json({ message: "Product not found" });
+        return res.status(409).json({ message: "Product not found" });
     }
 
 
@@ -155,7 +155,7 @@ export const updateProductStatus = asyncHandler(async (req: Request, res: Respon
 
     const product = await Product.findById(id);
     if (!product || product.isDeleted) {
-        return res.status(404).json({ message: "Product not found" });
+        return res.status(409).json({ message: "Product not found" });
     }
 
 
@@ -171,7 +171,7 @@ export const updateProductStatus = asyncHandler(async (req: Request, res: Respon
 
 
 
-export const blockProduct = asyncHandler(async (req: Request, res: Response): Promise<any> => {
+export const blockProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const { id } = req.params;
 
     const product = await Product.findById(id);

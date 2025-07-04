@@ -9,7 +9,7 @@ const CustomerHistory = ({ customerId }: { customerId: string }) => {
     // const CustomerHistory = () => {
     //     const { customerId } = useParams<{ customerId: string }>();
     if (!customerId) {
-        return <p className="text-red-500 text-center mt-10">❌ Invalid or missing customer ID.</p>;
+        return <p className="text-red-500 text-center mt-10">Invalid or missing customer ID.</p>;
     }
 
     const { data: paymentData, isLoading } = useGetCustomerPaymentHistoryQuery(customerId);

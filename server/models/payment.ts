@@ -57,9 +57,9 @@ const PaymentSchema: Schema<IPayment> = new Schema(
 
         paymentReference: { type: String, default: null },
 
+        status: { type: String, enum: ['active', 'inactive'], default: 'active' },
         isDeleted: { type: Boolean, default: false },
 
-        status: { type: String, enum: ['active', 'inactive'], default: 'active' },
         isBlock: {
             type: Boolean,
             default: false,
