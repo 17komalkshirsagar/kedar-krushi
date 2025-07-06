@@ -490,11 +490,7 @@ const PaymentPage = () => {
                     </Button>
 
                 </form>
-                {/* <Dialog open={openReceiptModal} onOpenChange={setOpenReceiptModal}>
-                    <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
-                        <Receipt onClose={() => setOpenReceiptModal(false)} />
-                    </DialogContent>
-                </Dialog> */}
+
                 <Dialog open={openReceiptModal} onOpenChange={setOpenReceiptModal}>
                     <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
                         {receiptData && <Receipt onClose={() => setOpenReceiptModal(false)} payment={receiptData} />}

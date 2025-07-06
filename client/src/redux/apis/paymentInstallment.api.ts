@@ -37,17 +37,24 @@ export const paymentInstallmentApi = createApi({
             providesTags: ["installment"],
         }),
 
-        getInstallmentById: builder.query<IInstallment, string>({
-            query: (id) => ({
-                url: `/installment/details/${id}`,
+        getInstallmentByBillNumber: builder.query<IInstallment, string>({
+            query: (billNumber) => ({
+                url: `/installment/details/${billNumber}`,
                 method: "GET",
             }),
             transformResponse: (data: { result: IInstallment }) => data.result,
             transformErrorResponse: (error: { status: number; data: { message: string } }) => error.data?.message,
             providesTags: ["installment"],
-
         }),
-
+        getInstallmentById: builder.query<IInstallment, string>({
+            query: (id) => ({
+                url: `/installment/get/installment/by/${id}`,
+                method: "GET",
+            }),
+            transformResponse: (data: { result: IInstallment }) => data.result,
+            transformErrorResponse: (error: { status: number; data: { message: string } }) => error.data?.message,
+            providesTags: ["installment"],
+        }),
         // Update Installment
         updateInstallment: builder.mutation<{ message: string; result: IInstallment }, { id: string; data: UpdateInstallment }>({
             query: ({ id, data }) => ({
@@ -99,9 +106,9 @@ export const paymentInstallmentApi = createApi({
 export const {
     useCreateInstallmentMutation,
     useGetAllInstallmentsQuery,
-    useGetInstallmentByIdQuery,
+    useGetInstallmentByBillNumberQuery,
     useUpdateInstallmentMutation,
     useDeleteInstallmentMutation,
     useGetInstallmentsByCustomerQuery,
-    useToggleInstallmentBlockMutation,
+    useToggleInstallmentBlockMutation, useGetInstallmentByIdQuery
 } = paymentInstallmentApi;

@@ -8,7 +8,7 @@ import { Customer } from '../models/Customer';
 import { recalculatePaymentStatus } from '../utils/paymentHelper';
 
 //  Create Installment
-export const addInstallmentByBillNumber = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const createaddInstallmentByBillNumber = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const { billNumber, customerId, amount, paymentDate, paymentMode, paymentReference } = req.body;
 
     const payment = await Payment.findOne({ billNumber, customer: customerId });
@@ -95,9 +95,7 @@ export const getInstallments = asyncHandler(async (req: Request, res: Response, 
 //  Get Single Payment with Installments
 export const getInstallmentById = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const { id } = req.params;
-    const cacheKey = `payment:${id}`;
-    const cachedData = await redisClient.get(cacheKey);
-    if (cachedData) return res.status(200).json(JSON.parse(cachedData));
+
 
     const payment = await Payment.findById(id)
         .populate('customer')
@@ -106,12 +104,32 @@ export const getInstallmentById = asyncHandler(async (req: Request, res: Respons
 
     if (!payment || payment.isDeleted) return res.status(409).json({ message: 'Payment not found' });
 
-    const installments = await PaymentInstallment.find({ payment: id }).sort({ paymentDate: 1 }).lean();
+    const installments = await PaymentInstallment.find({ payment: id }).sort({ paymentDate: -1 }).lean();
 
     const result = { ...payment, installments };
-    await redisClient.setex(cacheKey, 3600, JSON.stringify({ message: 'Payment fetched successfully', result }));
 
     res.status(200).json({ message: 'Payment fetched successfully', result });
+});
+export const getInstallmentByBillNumber = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const { id: billNumber } = req.params;
+
+    const payment = await Payment.findOne({ billNumber })
+        .populate('customer')
+        .populate('products.product')
+        .lean();
+
+    if (!payment || payment.isDeleted)
+        return res.status(409).json({ message: 'Payment not found' });
+
+    //  const latestInstallment = await PaymentInstallment.findOne({ payment: payment._id, isDeleted: { $ne: true } })
+    //     .sort({ paymentDate: -1 }).lean();
+    const installments = await PaymentInstallment.find({ payment: payment._id, isDeleted: false })
+        .sort({ paymentDate: -1 })
+        .lean();
+
+    const result = { ...payment, installments };
+
+    res.status(200).json({ message: 'fetched installment by bill number', result });
 });
 
 //  Update Installment

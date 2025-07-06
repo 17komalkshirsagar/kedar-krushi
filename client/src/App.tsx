@@ -10,6 +10,7 @@ import BatchTable from './pages/batch/BatchTable';
 import BatchPage from './pages/batch/BatchPage';
 import Dashboard from './pages/dasboard/Dashboard';
 
+
 const Loader = () => (
   <div className="flex justify-center items-center h-screen">
     <p className="text-lg font-semibold text-gray-600">Loading...</p>
@@ -77,20 +78,3 @@ const App = () => {
 
 export default App;
 
-
-{/* {searchProduct && filteredProducts.length > 0 && (
-                            <div className="border rounded mt-2 max-h-40 overflow-y-auto bg-white shadow z-10">
-                                {filteredProducts.map((product) => (
-                                    <div
-                                        key={product._id}
-                                        className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                                        onClick={() => {
-                                            append({ productId: product._id, quantity: 1 });
-                                            setSearchProduct('');
-                                        }}
-                                    >
-                                        {product.name} (₹{product.price})
-                                    </div>
-                                ))}
-                            </div>
-                        )} */}
