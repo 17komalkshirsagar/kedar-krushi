@@ -8,6 +8,7 @@ export interface IPaymentProduct {
 }
 
 export interface IPayment extends Document {
+    _id: mongoose.Types.ObjectId;
     customer: mongoose.Types.ObjectId;
     products: IPaymentProduct[];
     totalAmount: number;

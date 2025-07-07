@@ -6,9 +6,9 @@ import ProductTable from './pages/product/ProductTable';
 import PaymentPage from './pages/payment/PaymentPage';
 import Receipt from './pages/payment/Receipt';
 import CustomerHistory from './pages/customer/CustomerHistory';
-import BatchTable from './pages/batch/BatchTable';
-import BatchPage from './pages/batch/BatchPage';
+
 import Dashboard from './pages/dasboard/Dashboard';
+import InstallmentAccordion from './pages/installment/InstallmentAccordion';
 
 
 const Loader = () => (
@@ -63,9 +63,6 @@ const App = () => {
         <Route path="/supplier-table" element={<SupplierTable />} />
         <Route path="/bill" element={<PaymentPage />} />
         <Route path="/receipt" element={<Receipt />} />
-        <Route path="/batch-table" element={<BatchTable />} />
-        <Route path="/batch-page" element={<BatchPage />} />
-        <Route path="/batch-page/:id" element={<BatchPage />} />
         <Route path="/customer-history/:customerId" element={<CustomerHistory />} />
         <Route path="/dashboard" element={<Dashboard />} />
 

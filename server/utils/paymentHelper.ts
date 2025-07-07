@@ -6,11 +6,15 @@ export const recalculatePaymentStatus = async (paymentId: string | Types.ObjectI
     const payment = await Payment.findById(paymentId);
     if (!payment) return;
 
-    const installments = await PaymentInstallment.find({ payment: payment._id });
+    const installments = await PaymentInstallment.find({
+        payment: payment._id,
+        isDeleted: false,
+    });
+
     const totalPaid = installments.reduce((sum, i) => sum + i.amount, 0);
 
     payment.paidAmount = totalPaid;
-    payment.pendingAmount = payment.totalAmount - totalPaid;
+    payment.pendingAmount = Math.max(payment.totalAmount - totalPaid, 0);
 
     payment.paymentStatus =
         totalPaid === 0

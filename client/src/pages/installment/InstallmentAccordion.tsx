@@ -73,6 +73,7 @@ import { useGetInstallmentByBillNumberQuery } from "../../redux/apis/paymentInst
 
 const InstallmentAccordion = ({ billNumber }: { billNumber: string }) => {
     const { data, isLoading } = useGetInstallmentByBillNumberQuery(billNumber);
+    console.log("dataaaaaa:::", data);
 
     if (isLoading) return <p>Loading installments...</p>;
     if (!data?.installments?.length) return <p>No installments found.</p>;

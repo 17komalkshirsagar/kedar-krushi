@@ -226,7 +226,7 @@ const AddInstallmentModal = ({
                             </div>
                         </div>
 
-                        {/* Installment Amount */}
+
                         <div>
                             <Label
                                 htmlFor="amount"

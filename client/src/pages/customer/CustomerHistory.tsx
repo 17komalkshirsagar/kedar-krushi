@@ -151,9 +151,12 @@ import { useGetAllCustomersQuery } from '../../redux/apis/customer.api';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Button } from '../../components/ui/button';
+import { toast } from 'sonner';
+
 import AddInstallmentModal from '../installment/AddInstallmentModal';
 import InstallmentAccordion from '../installment/InstallmentAccordion';
-import Receipt from '../payment/Receipt';
+
+import PayAllPendingPaymentModal from '../installment/PayAllPendingPaymentModal';
 
 const CustomerHistory = ({ customerId }: { customerId: string }) => {
 
@@ -164,9 +167,10 @@ const CustomerHistory = ({ customerId }: { customerId: string }) => {
     const [selectedPayment, setSelectedPayment] = useState<any>(null);
     const [expandedBill, setExpandedBill] = useState<string | null>(null);
 
-    const { data: paymentData, isLoading } = useGetCustomerPaymentHistoryQuery(customerId);
+    const { data: paymentData, isLoading, refetch } = useGetCustomerPaymentHistoryQuery(customerId);
     const { data: allCustomers } = useGetAllCustomersQuery({});
 
+    ``
     if (isLoading) return <p className="text-center text-gray-600 mt-10">Loading...</p>;
 
     const customer = allCustomers?.result?.find(c => c._id === customerId);
@@ -202,6 +206,10 @@ const CustomerHistory = ({ customerId }: { customerId: string }) => {
                             <p><span className="font-medium">📧 Email:</span> {customer.email}</p>
                         </div>
 
+
+                        <div className="mt-4">
+                            <PayAllPendingPaymentModal
+                                customerId={customer._id ?? ""} customer={customer} totals={totals} refetch={refetch} /></div>
 
 
 
@@ -317,19 +325,24 @@ const CustomerHistory = ({ customerId }: { customerId: string }) => {
 
                                 </tr>
 
-                                {expandedBill === payment.billNumber && (
+                                {expandedBill === payment.billNumber && payment.billNumber && (
                                     <tr>
                                         <td colSpan={9} className="bg-gray-50 border px-4 py-3">
                                             <InstallmentAccordion billNumber={payment.billNumber} />
                                         </td>
+
                                     </tr>
+
                                 )}
+
+
                             </React.Fragment>
                         ))}
                     </tbody>
 
                 </table>
             </div>
+
             <AddInstallmentModal
                 open={showModal}
                 onClose={() => setShowModal(false)}

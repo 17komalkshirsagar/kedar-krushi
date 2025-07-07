@@ -210,6 +210,59 @@ export const getCustomerPaymentSummary = asyncHandler(async (
 });
 
 
+// export const getCustomerPaymentHistory = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+//     const { customerId } = req.params;
+
+//     const result = await Payment.find({
+//         customer: customerId,
+//         isDeleted: false,
+//     }).populate("products.product", "name").sort({ createdAt: -1 });
+
+//     const totals = result.reduce(
+//         (acc, payment) => {
+//             acc.totalAmount += payment.totalAmount || 0;
+//             acc.paidAmount += payment.paidAmount || 0;
+//             acc.pendingAmount += payment.pendingAmount || 0;
+//             return acc;
+//         },
+//         { totalAmount: 0, paidAmount: 0, pendingAmount: 0 }
+//     );
+
+//     let purchaseInfo = null;
+
+
+//     const dates = result
+//         .map(p => p.createdAt ? new Date(p.createdAt) : undefined)
+//         .filter((d): d is Date => d !== undefined);
+
+//     if (dates.length > 0) {
+//         const sortedDates = dates.sort((a, b) => a.getTime() - b.getTime());
+
+//         const firstPurchase = sortedDates[0];
+//         const lastPurchase = sortedDates[sortedDates.length - 1];
+
+//         const firstYear = firstPurchase.getFullYear();
+//         const lastYear = lastPurchase.getFullYear();
+
+//         purchaseInfo = {
+//             yearRange: firstYear === lastYear ? `${firstYear}` : `${firstYear} – ${lastYear}`,
+//             firstDate: firstPurchase.toLocaleDateString('en-IN', {
+//                 day: '2-digit',
+//                 month: 'long',
+//                 year: 'numeric'
+//             }),
+//             lastDate: lastPurchase.toLocaleDateString('en-IN', {
+//                 day: '2-digit',
+//                 month: 'long',
+//                 year: 'numeric'
+//             }),
+//         };
+//     }
+
+//     res.status(200).json({ message: "Payment customer payment history successfully", result, totals, purchaseInfo, });
+// });
+
+
 export const getCustomerPaymentHistory = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const { customerId } = req.params;
 
@@ -220,16 +273,20 @@ export const getCustomerPaymentHistory = asyncHandler(async (req: Request, res: 
 
     const totals = result.reduce(
         (acc, payment) => {
-            acc.totalAmount += payment.totalAmount || 0;
-            acc.paidAmount += payment.paidAmount || 0;
-            acc.pendingAmount += payment.pendingAmount || 0;
+            const total = payment.totalAmount || 0;
+            const paid = Math.min(payment.paidAmount || 0, total);
+            const pending = Math.max(total - paid, 0);
+
+            acc.totalAmount += total;
+            acc.paidAmount += paid;
+            acc.pendingAmount += pending;
+
             return acc;
         },
         { totalAmount: 0, paidAmount: 0, pendingAmount: 0 }
     );
 
     let purchaseInfo = null;
-
 
     const dates = result
         .map(p => p.createdAt ? new Date(p.createdAt) : undefined)
@@ -259,5 +316,5 @@ export const getCustomerPaymentHistory = asyncHandler(async (req: Request, res: 
         };
     }
 
-    res.status(200).json({ message: "Payment customer payment history successfully", result, totals, purchaseInfo, });
+    res.status(200).json({ message: "Payment customer payment history successfully", result, totals, purchaseInfo });
 });

@@ -28,7 +28,8 @@ export const createaddInstallmentByBillNumber = asyncHandler(async (req: Request
         paymentReference,
     });
 
-    await recalculatePaymentStatus(result.payment);
+    // await recalculatePaymentStatus(result.payment);
+    await recalculatePaymentStatus(payment._id)
 
 
     await invalidateCache(`payment:${payment._id}`);
@@ -227,3 +228,61 @@ export const installmentBlock = asyncHandler(async (req: Request, res: Response,
         message: `Installment ${result?.isBlock ? "blocked" : "unblocked"} successfully`, result
     });
 });
+
+
+export const payPendingBillsInOrder = asyncHandler(async (req: Request, res: Response): Promise<any> => {
+    const { customerId, totalPayAmount, paymentDate, paymentMode, paymentReference } = req.body;
+
+    if (!customerId || !totalPayAmount) {
+        return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    const pendingPayments = await Payment.find({
+        customer: customerId,
+        isDeleted: false,
+        $expr: { $lt: ["$paidAmount", "$totalAmount"] }
+    }).sort({ pendingAmount: 1 });
+
+    let remainingAmount = totalPayAmount;
+    const createdInstallments: any[] = [];
+
+    for (const payment of pendingPayments) {
+        const pending = payment.totalAmount - payment.paidAmount;
+        if (remainingAmount <= 0) break;
+
+        const payAmount = Math.min(pending, remainingAmount);
+
+        const installment = await PaymentInstallment.create({
+            payment: payment._id,
+            billNumber: payment.billNumber,
+            customer: customerId,
+            amount: payAmount,
+            paymentDate,
+            paymentMode,
+            paymentReference,
+        });
+
+        await recalculatePaymentStatus(payment._id);
+        await invalidateCache(`payment:${payment._id}`);
+
+        createdInstallments.push(installment);
+        remainingAmount -= payAmount;
+    }
+
+    await invalidateCache('installments:*');
+
+
+    const populatedPayments = await Payment.find({
+        _id: { $in: createdInstallments.map(i => i.payment) }
+    })
+        .populate('products.product')
+        .populate('customer');
+
+
+    res.status(200).json({
+        message: 'Bulk installment payments added',
+        result: createdInstallments,
+        payments: populatedPayments,
+    });
+});
+

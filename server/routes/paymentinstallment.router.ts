@@ -13,6 +13,7 @@ paymentInstallmentRouter
     .get("/installment/customer/:id", paymentInstallmentController.getInstallmentsByCustomer)
     .put("/installment/block/:id", paymentInstallmentController.installmentBlock)
     .get("/installment/get/installment/by/:id", paymentInstallmentController.getInstallmentById)
+    .post("/installment/all/pay", paymentInstallmentController.payPendingBillsInOrder)
 
 
 export default paymentInstallmentRouter;

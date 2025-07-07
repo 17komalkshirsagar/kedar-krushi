@@ -2,7 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { createCustomBaseQuery } from "./customBaseQuery.api";
 
 import { IPagination } from "../../models/pagination.interface";
-import { CreateInstallment, IInstallment, UpdateInstallment } from "../../models/paymentInstallment.interface";
+import { AddAllInstallmentResponse, CreateBulkInstallment, CreateInstallment, IInstallment, UpdateInstallment } from "../../models/paymentInstallment.interface";
 
 const baseUrl = `${import.meta.env.VITE_BACKEND_URL}/api/v1/payment-installment`;
 const customBaseQuery = createCustomBaseQuery(baseUrl);
@@ -100,6 +100,17 @@ export const paymentInstallmentApi = createApi({
             invalidatesTags: ["installment"],
         }),
 
+
+        addAllInstallment: builder.mutation<AddAllInstallmentResponse, CreateBulkInstallment>({
+            query: (body) => ({
+                url: '/installment/all/pay',
+                method: "POST",
+                body,
+            }),
+            transformResponse: (data: AddAllInstallmentResponse) => data,
+            transformErrorResponse: (error: { status: number; data: { message: string } }) => error.data?.message,
+            invalidatesTags: ["installment"],
+        }),
     }),
 });
 
@@ -110,5 +121,5 @@ export const {
     useUpdateInstallmentMutation,
     useDeleteInstallmentMutation,
     useGetInstallmentsByCustomerQuery,
-    useToggleInstallmentBlockMutation, useGetInstallmentByIdQuery
+    useToggleInstallmentBlockMutation, useGetInstallmentByIdQuery, useAddAllInstallmentMutation
 } = paymentInstallmentApi;

@@ -1,4 +1,5 @@
 import { InstallmentItem, ProductItem } from "./InstallmentAccordion.interface";
+import { IPayment } from "./payment.interface";
 
 export interface IInstallment {
     _id: string;
@@ -34,16 +35,7 @@ export interface IInstallment {
     year: number;
 }
 
-// export interface CreateInstallment {
-//     billNumber: string;
-//     customerId: string;
-//     result: string;
-//     installments: string;
-//     amount: number;
-//     paymentDate: string;
-//     paymentMode: "Cash" | "UPI" | "Bank Transfer";
-//     paymentReference?: string;
-// }
+
 export interface CreateInstallment {
     billNumber: string;
     customerId: string;
@@ -60,4 +52,19 @@ export interface UpdateInstallment {
     paymentMode?: "Cash" | "UPI" | "Bank Transfer";
     paymentReference?: string;
     status?: string;
+}
+
+export interface CreateBulkInstallment {
+    customerId: string;
+    totalPayAmount: number;
+    paymentDate: string;
+    paymentMode: 'Cash' | 'UPI' | 'Bank Transfer' | 'Credit' | 'Other';
+    paymentReference?: string;
+}
+
+
+export interface AddAllInstallmentResponse {
+    message: string;
+    result: IInstallment[];
+    payments: IPayment[];
 }
