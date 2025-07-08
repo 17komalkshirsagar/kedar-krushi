@@ -27,7 +27,8 @@ const InstallmentRecipt = ({
             return `
                 <tr>
                   <td>${item.billNumber || item.product.billNumber || 'N/A'}</td>
-        <td>${new Date(item.createdAt || payment?.createdAt).toLocaleDateString("hi-IN")}</td>
+         <td>${new Date(item.createdAt || payment?.createdAt).toLocaleDateString("hi-IN")}</td>
+
                     <td>${item.product.name}</td>
                     <td>${item.product.category}</td>
                     <td>${item.product.batchNumber}</td>
@@ -342,8 +343,13 @@ const InstallmentRecipt = ({
                                                 {item.billNumber || item.product.billNumber || 'N/A'}
                                             </td>
                                             <td className="border border-gray-400 p-1">
-                                                {new Date(item.createdAt || payment?.createdAt).toLocaleDateString("hi-IN")}
+                                                {new Date(item.createdAt || payment?.createdAt).toLocaleDateString("en-IN", {
+                                                    day: "numeric",
+                                                    month: "long",
+                                                    year: "numeric",
+                                                })}
                                             </td>
+
 
                                             <td className="border border-gray-400 p-1">{item.product.name}</td>
                                             <td className="border border-gray-400 p-1">{item.product.category}</td>
@@ -351,6 +357,7 @@ const InstallmentRecipt = ({
                                             <td className="border border-gray-400 p-1">
                                                 {new Date(item.product.expiryDate).toLocaleDateString("hi-IN")}
                                             </td>
+
                                             <td className="border border-gray-400 p-1">{item.product.unit}</td>
                                             <td className="border border-gray-400 p-1">{item.quantity}</td>
                                             <td className="border border-gray-400 p-1">{item.price}</td>
@@ -404,4 +411,11 @@ const InstallmentRecipt = ({
 };
 
 export default InstallmentRecipt;
+
+
+
+
+
+
+
 

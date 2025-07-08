@@ -6,6 +6,7 @@ import { invalidateCache } from '../utils/redisMiddleware';
 import { Payment } from '../models/payment';
 import { Customer } from '../models/Customer';
 import { recalculatePaymentStatus } from '../utils/paymentHelper';
+import { generateBillNumber } from '../utils/generateBillNumber';
 
 //  Create Installment
 export const createaddInstallmentByBillNumber = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -230,6 +231,63 @@ export const installmentBlock = asyncHandler(async (req: Request, res: Response,
 });
 
 
+// export const payPendingBillsInOrder = asyncHandler(async (req: Request, res: Response): Promise<any> => {
+//     const { customerId, totalPayAmount, paymentDate, paymentMode, paymentReference } = req.body;
+
+//     if (!customerId || !totalPayAmount) {
+//         return res.status(400).json({ message: 'Missing required fields' });
+//     }
+
+//     const pendingPayments = await Payment.find({
+//         customer: customerId,
+//         isDeleted: false,
+//         $expr: { $lt: ["$paidAmount", "$totalAmount"] }
+//     }).sort({ pendingAmount: 1 });
+
+//     let remainingAmount = totalPayAmount;
+//     const createdInstallments: any[] = [];
+
+//     for (const payment of pendingPayments) {
+//         const pending = payment.totalAmount - payment.paidAmount;
+//         if (remainingAmount <= 0) break;
+
+//         const payAmount = Math.min(pending, remainingAmount);
+
+//         const installment = await PaymentInstallment.create({
+//             payment: payment._id,
+//             billNumber: payment.billNumber,
+//             customer: customerId,
+//             amount: payAmount,
+//             paymentDate,
+//             paymentMode,
+//             paymentReference,
+//         });
+
+//         await recalculatePaymentStatus(payment._id);
+//         await invalidateCache(`payment:${payment._id}`);
+
+//         createdInstallments.push(installment);
+//         remainingAmount -= payAmount;
+//     }
+
+//     await invalidateCache('installments:*');
+
+
+//     const populatedPayments = await Payment.find({
+//         _id: { $in: createdInstallments.map(i => i.payment) }
+//     })
+//         .populate('products.product')
+//         .populate('customer');
+
+
+//     res.status(200).json({
+//         message: 'Bulk installment payments added',
+//         result: createdInstallments,
+//         payments: populatedPayments,
+//     });
+// });
+
+
 export const payPendingBillsInOrder = asyncHandler(async (req: Request, res: Response): Promise<any> => {
     const { customerId, totalPayAmount, paymentDate, paymentMode, paymentReference } = req.body;
 
@@ -238,10 +296,14 @@ export const payPendingBillsInOrder = asyncHandler(async (req: Request, res: Res
     }
 
     const pendingPayments = await Payment.find({
-        customer: customerId,
-        isDeleted: false,
-        $expr: { $lt: ["$paidAmount", "$totalAmount"] }
-    }).sort({ pendingAmount: 1 });
+        customer: customerId, isDeleted: false, $expr: { $lt: ["$paidAmount", "$totalAmount"] }
+    }).sort({ createdAt: 1 });
+
+    if (pendingPayments.length === 0) {
+        return res.status(400).json({ message: 'No pending payments found' });
+    }
+
+    const receiptBillNumber = await generateBillNumber();
 
     let remainingAmount = totalPayAmount;
     const createdInstallments: any[] = [];
@@ -254,15 +316,25 @@ export const payPendingBillsInOrder = asyncHandler(async (req: Request, res: Res
 
         const installment = await PaymentInstallment.create({
             payment: payment._id,
-            billNumber: payment.billNumber,
             customer: customerId,
+            billNumber: receiptBillNumber,
             amount: payAmount,
             paymentDate,
             paymentMode,
             paymentReference,
         });
 
-        await recalculatePaymentStatus(payment._id);
+
+        payment.paidAmount += payAmount;
+        payment.pendingAmount = payment.totalAmount - payment.paidAmount;
+
+        if (payment.paidAmount >= payment.totalAmount) {
+            payment.paymentStatus = "Paid";
+        } else if (payment.paidAmount > 0) {
+            payment.paymentStatus = "Partial";
+        }
+
+        await payment.save();
         await invalidateCache(`payment:${payment._id}`);
 
         createdInstallments.push(installment);
@@ -271,18 +343,14 @@ export const payPendingBillsInOrder = asyncHandler(async (req: Request, res: Res
 
     await invalidateCache('installments:*');
 
-
     const populatedPayments = await Payment.find({
         _id: { $in: createdInstallments.map(i => i.payment) }
     })
         .populate('products.product')
         .populate('customer');
 
-
     res.status(200).json({
-        message: 'Bulk installment payments added',
-        result: createdInstallments,
-        payments: populatedPayments,
+        message: 'All pending bills paid successfully',
+        result: createdInstallments, payments: populatedPayments, billNumber: receiptBillNumber,
     });
 });
-

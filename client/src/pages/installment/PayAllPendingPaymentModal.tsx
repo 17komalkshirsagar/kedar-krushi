@@ -53,6 +53,7 @@ const PayAllPendingPaymentModal = ({
     const [showReceipt, setShowReceipt] = useState(false);
     const [receiptPayments, setReceiptPayments] = useState<any[]>([]);
     const { data: paymentData } = useGetAllPaymentsQuery({});
+    const [receiptBillNumber, setReceiptBillNumber] = useState("");
 
     const [payAll, { isLoading }] = useAddAllInstallmentMutation();
     const combinedProducts = paymentData?.result?.flatMap((p: any) => p.products) || [];
@@ -80,17 +81,18 @@ const PayAllPendingPaymentModal = ({
                 paymentMode: data.paymentMode,
                 paymentReference: "ALL-IN-ONE",
             }).unwrap();
-
-            toast.success("Payment successfully submitted.");
             setReceiptPayments(res.payments || []);
+            setReceiptBillNumber(res.billNumber);
             setOpen(false);
             setShowReceipt(true);
             await refetch();
             reset();
         } catch (err) {
-            toast.error("Something went wrong.");
+            console.log("Something went wrong.");
         }
     };
+
+
 
     return (
         <>
@@ -216,26 +218,32 @@ const PayAllPendingPaymentModal = ({
                     <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
                         <DialogHeader>Receipt</DialogHeader>
 
+
+
+
                         <InstallmentRecipt
                             payment={{
                                 customer: customer,
                                 createdAt: new Date().toISOString(),
                                 paymentMode: "Cash",
                                 paymentReference: "ALL-IN-ONE",
+                                billNumber: receiptBillNumber,
+
+
                                 products: receiptPayments.flatMap(p =>
-                                    p.products.map(prod => ({
+                                    p.products.map((prod: any) => ({
                                         ...prod,
                                         billNumber: p.billNumber,
+                                        createdAt: p.createdAt,
                                     }))
                                 ),
+
                                 totalAmount: receiptPayments.reduce((sum, p) => sum + p.totalAmount, 0),
                                 pendingAmount: receiptPayments.reduce((sum, p) => sum + p.pendingAmount, 0),
                                 paidAmount: receiptPayments.reduce((sum, p) => sum + p.paidAmount, 0),
-                                billNumber: receiptPayments.map(p => p.billNumber).join(", "),
                             }}
                             onClose={() => setShowReceipt(false)}
                         />
-
 
 
 
@@ -256,3 +264,11 @@ const PayAllPendingPaymentModal = ({
 };
 
 export default PayAllPendingPaymentModal;
+
+
+
+
+
+
+
+

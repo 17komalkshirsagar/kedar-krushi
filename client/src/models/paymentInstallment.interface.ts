@@ -67,4 +67,5 @@ export interface AddAllInstallmentResponse {
     message: string;
     result: IInstallment[];
     payments: IPayment[];
+    billNumber: string; formattedDate?: string;
 }

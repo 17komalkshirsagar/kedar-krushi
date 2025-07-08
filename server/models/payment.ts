@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import { Counter } from './Counter';
+import { generateBillNumber } from '../utils/generateBillNumber';
 
 export interface IPaymentProduct {
     product: mongoose.Types.ObjectId;
@@ -70,17 +70,9 @@ const PaymentSchema: Schema<IPayment> = new Schema(
 );
 PaymentSchema.pre('save', async function (next) {
     if (this.isNew) {
-        const currentYear = new Date().getFullYear().toString();
-
-        const counter = await Counter.findOneAndUpdate(
-            { id: currentYear },
-            { $inc: { seq: 1 } },
-            { new: true, upsert: true }
-        );
-
-        const paddedSeq = counter.seq.toString().padStart(4, '0');
-        this.billNumber = `${currentYear}-${paddedSeq}`;
-        this.year = Number(currentYear);
+        const billNumber = await generateBillNumber();
+        this.billNumber = billNumber;
+        this.year = Number(new Date().getFullYear());
     }
     next();
 });
