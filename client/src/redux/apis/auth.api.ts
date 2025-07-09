@@ -49,7 +49,7 @@ export const authApi = createApi({
                     }
                 },
                 transformResponse: (data: { message: string, result: IAdmin }) => {
-                    localStorage.setItem("user", JSON.stringify(data.result))
+                    localStorage.setItem("admin", JSON.stringify(data.result))
                     return data
                 },
                 transformErrorResponse: (error: { status: number, data: { message: string } }) => {
@@ -65,7 +65,7 @@ export const authApi = createApi({
                     }
                 },
                 transformResponse: (data: { message: string }) => {
-                    localStorage.removeItem("user")
+                    localStorage.removeItem("admin")
                     return data.message
                 },
                 transformErrorResponse: (error: { status: number, data: { message: string } }) => {

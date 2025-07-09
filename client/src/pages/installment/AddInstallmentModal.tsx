@@ -91,6 +91,7 @@ import { toast } from "sonner";
 import { useCreateInstallmentMutation } from "../../redux/apis/paymentInstallment.api";
 import { useGetCustomerPaymentHistoryQuery } from "../../redux/apis/payment.api";
 import { useForm, Controller } from "react-hook-form";
+import { useEffect } from "react";
 
 
 interface AddInstallmentModalProps {
@@ -108,7 +109,7 @@ const AddInstallmentModal = ({
     customerId,
     customer,
 }: AddInstallmentModalProps) => {
-    const [createInstallment] = useCreateInstallmentMutation();
+    const [createInstallment, { isSuccess: isAddSuccess, isError, isLoading }] = useCreateInstallmentMutation();
     const { refetch } = useGetCustomerPaymentHistoryQuery(customerId);
 
     const {
@@ -118,9 +119,10 @@ const AddInstallmentModal = ({
         reset,
     } = useForm({
         defaultValues: {
-            amount: "",
+            amount: payment?.pendingAmount || "",
             paymentMode: payment?.paymentMode || "Cash",
         },
+
     });
 
     const onSubmit = async (data: any) => {
@@ -134,15 +136,38 @@ const AddInstallmentModal = ({
                 paymentReference: "",
             }).unwrap();
 
-            toast.success(`₹${data.amount} added successfully.`);
+
             reset();
             await refetch();
             onClose();
         } catch (err) {
-            toast.error("Failed to create installment");
+
+
+            console.log("Failed to create installment");
         }
     };
+    useEffect(() => {
+        if (isAddSuccess) {
+            toast.success(`amount added successfully.`);
 
+        }
+    }, [isAddSuccess,]);
+
+    useEffect(() => {
+        if (payment) {
+            reset({
+                amount: payment.pendingAmount || "",
+                paymentMode: payment.paymentMode || "Cash",
+            });
+        }
+    }, [payment, reset]);
+
+
+    useEffect(() => {
+        if (isError) {
+            toast.error("Failed to create installment");
+        }
+    }, [isError]);
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="max-w-lg bg-white rounded-xl shadow-lg p-6 space-y-6">
@@ -253,7 +278,6 @@ const AddInstallmentModal = ({
                             )}
                         </div>
 
-                        {/* Payment Mode Radio */}
                         <div>
                             <Label className="block text-sm font-medium text-gray-700 mb-1">
                                 Select Payment Mode

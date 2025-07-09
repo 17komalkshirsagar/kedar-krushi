@@ -7,6 +7,7 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { Icons } from '../../components/ui/icons';
+import { useEffect } from "react";
 const schema = z.object({
     email: z.string().email("Enter a valid email"),
 });
@@ -14,7 +15,7 @@ const schema = z.object({
 type ForgotPasswordFormData = z.infer<typeof schema>;
 
 export default function ForgotPasswordPage() {
-    const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+    const [forgotPassword, { isSuccess: isAddSuccess, isError: isAddError, isLoading }] = useForgotPasswordMutation();
 
     const {
         register,
@@ -27,11 +28,26 @@ export default function ForgotPasswordPage() {
     const onSubmit = async ({ email }: ForgotPasswordFormData) => {
         try {
             const res = await forgotPassword(email).unwrap();
-            toast.success(res);
         } catch (error: any) {
-            toast.error(error?.message || "Something went wrong");
+            console.log(error?.message || "Something went wrong");
         }
     };
+
+
+    useEffect(() => {
+        if (isAddSuccess) {
+            toast.success('Login successfully');
+
+        }
+    }, [isAddSuccess,]);
+
+
+    useEffect(() => {
+        if (isAddError) {
+            toast.error('failed. Please try again.');
+        }
+    }, [isAddError]);
+
 
     return (
         <div className="min-h-screen flex items-center justify-center px-4 bg-gray-100">

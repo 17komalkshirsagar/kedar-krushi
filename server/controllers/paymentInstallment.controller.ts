@@ -8,6 +8,8 @@ import { Customer } from '../models/Customer';
 import { recalculatePaymentStatus } from '../utils/paymentHelper';
 import { generateBillNumber } from '../utils/generateBillNumber';
 
+
+
 //  Create Installment
 export const createaddInstallmentByBillNumber = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const { billNumber, customerId, amount, paymentDate, paymentMode, paymentReference } = req.body;
@@ -354,3 +356,5 @@ export const payPendingBillsInOrder = asyncHandler(async (req: Request, res: Res
         result: createdInstallments, payments: populatedPayments, billNumber: receiptBillNumber,
     });
 });
+
+

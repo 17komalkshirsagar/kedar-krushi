@@ -9,7 +9,7 @@ export interface IAdmin extends Document {
     phone: number
     confirmPassword?: string
     profile?: string
-    role: 'Admin';
+    role: 'admin';
     status: 'active' | 'inactive';
     sessionToken: string | null
 }
@@ -29,9 +29,10 @@ const adminSchema = new Schema<IAdmin>({
     profile: { type: String, trim: true },
     role: {
         type: String,
-        enum: ["Admin"],
-        default: "Admin",
-        required: true
+        enum: ["admin"],
+        default: "admin",
+        required: true,
+        lowercase: true
     },
     status: { type: String, default: "active", enum: ['active', 'inactive'] },
     sessionToken: { type: String, default: null },

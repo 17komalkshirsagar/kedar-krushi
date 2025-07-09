@@ -2,7 +2,7 @@
 
 
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Dialog,
     DialogContent,
@@ -55,7 +55,7 @@ const PayAllPendingPaymentModal = ({
     const { data: paymentData } = useGetAllPaymentsQuery({});
     const [receiptBillNumber, setReceiptBillNumber] = useState("");
 
-    const [payAll, { isLoading }] = useAddAllInstallmentMutation();
+    const [payAll, { isSuccess: isAddSuccess, isError, isLoading }] = useAddAllInstallmentMutation();
     const combinedProducts = paymentData?.result?.flatMap((p: any) => p.products) || [];
 
     const {
@@ -92,7 +92,20 @@ const PayAllPendingPaymentModal = ({
         }
     };
 
+    useEffect(() => {
+        if (isAddSuccess) {
+            toast.success('Pending Prdouct amount added successfully');
 
+        }
+    }, [isAddSuccess,]);
+
+
+
+    useEffect(() => {
+        if (isError) {
+            toast.error('Failed to save product');
+        }
+    }, [isError]);
 
     return (
         <>

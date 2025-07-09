@@ -26,8 +26,8 @@ const SendOtpPage = () => {
     const [otpSent, setOtpSent] = useState(false);
     const [username, setUsername] = useState("");
 
-    const [sendOTP, { isLoading: isSending }] = useSendOTPMutation();
-    const [verifyOTP, { isLoading: isVerifying, isSuccess, isError, isLoading }] = useVerifyOTPMutation();
+    const [sendOTP, { isLoading: isSending, isSuccess: isSendSuccess, isError: isSendError }] = useSendOTPMutation();
+    const [verifyOTP, { isLoading: isVerifying, isSuccess, isError, }] = useVerifyOTPMutation();
 
     const {
         register,
@@ -42,9 +42,8 @@ const SendOtpPage = () => {
             await sendOTP({ adminName: data.identifier }).unwrap();
             setOtpSent(true);
             setUsername(data.identifier);
-            toast.success("OTP sent!");
         } catch (err) {
-            toast.error("Failed to send OTP");
+            console.log("Failed to send OTP");
         }
     };
 
@@ -54,20 +53,47 @@ const SendOtpPage = () => {
                 adminName: username,
                 otp: data.otp,
             }).unwrap();
-            toast.success("OTP verified!");
-            navigate("/admin");
         } catch (err) {
-            toast.error("Invalid OTP");
+            console.log("Invalid OTP");
         }
     };
+
 
 
     useEffect(() => {
         if (isSuccess) {
             toast.success("OTP verified!");
-            navigate("/admin");
+            navigate("/dashboard")
         }
     }, [isSuccess, navigate]);
+
+    useEffect(() => {
+        if (isError) {
+            toast.error("OTP verification failed. Please try again.");
+        }
+    }, [isError]);
+    useEffect(() => {
+        if (isSending) {
+            toast.loading("Sending OTP...");
+        }
+    }, [isSending]);
+    useEffect(() => {
+        if (isVerifying) {
+            toast.loading("Sending Verifying OTP...");
+        }
+    }, [isVerifying]);
+    useEffect(() => {
+        if (isSendSuccess) {
+            toast.success("OTP verified!");
+            navigate("/verify-otp")
+        }
+    }, [isSendSuccess, navigate]);
+
+    useEffect(() => {
+        if (isSendError) {
+            toast.error("Failed to send OTP. Please try again.");
+        }
+    }, [isSendError]);
 
     return (
         <div className="flex items-center justify-center h-screen bg-muted">

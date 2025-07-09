@@ -231,7 +231,7 @@ export const register = asyncHandler(async (req: Request, res: Response, next: N
         email,
         phone,
         password: hashedPassword,
-        role: "Admin",
+        role: "admin",
         status: "active",
     });
     return res.status(201).json({
@@ -282,7 +282,7 @@ export const continueWithGoogle = asyncHandler(async (req: Request, res: Respons
             phone: Math.floor(1000000000 + Math.random() * 9000000000),
             password: await bcryptjs.hash(crypto.randomBytes(10).toString("hex"), 10),
             profile: picture || "",
-            role: "Admin",
+            role: "admin",
             status: "active",
         });
     }

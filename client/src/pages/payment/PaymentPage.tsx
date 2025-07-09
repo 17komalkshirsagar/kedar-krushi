@@ -159,7 +159,7 @@ const PaymentPage = () => {
 
             setReceiptData(res.result);
             setOpenReceiptModal(true);
-            toast.success("Payment added successfully");
+
 
             reset({
                 customerId: '',
@@ -171,9 +171,10 @@ const PaymentPage = () => {
             setSearchMobile('');
             setSearchProduct('');
         } catch (err) {
-            toast.error("Failed to save payment");
+            console.log("Failed to save payment");
         }
     };
+
 
     const totalAmount = watchProducts.reduce((sum, p) => {
         const prod = getProductDetails(p.productId);
