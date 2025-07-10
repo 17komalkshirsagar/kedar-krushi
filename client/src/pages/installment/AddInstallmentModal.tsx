@@ -1,87 +1,4 @@
 
-// import { Dialog, DialogContent } from "../../components/ui/dialog";
-// import { Label } from "../../components/ui/label";
-// import { Input } from "../../components/ui/input";
-// import { Button } from "../../components/ui/button";
-// import { toast } from 'sonner'
-// import { useState } from "react";
-// import { useCreateInstallmentMutation } from "../../redux/apis/paymentInstallment.api";
-// import { useGetCustomerPaymentHistoryQuery } from "../../redux/apis/payment.api";
-
-// interface AddInstallmentModalProps {
-//     open: boolean;
-//     onClose: () => void;
-//     payment: any;
-//     customerId: string;
-// }
-
-// const AddInstallmentModal = ({ open, onClose, payment, customerId }: AddInstallmentModalProps) => {
-//     const [amount, setAmount] = useState("");
-
-//     const [createInstallment] = useCreateInstallmentMutation();
-//     const { refetch } = useGetCustomerPaymentHistoryQuery(customerId);
-//     const handleSubmit = async () => {
-//         try {
-//             await createInstallment({
-//                 billNumber: payment.billNumber,
-//                 customerId: customerId,
-//                 amount: Number(amount),
-//                 paymentMode: payment.paymentMode,
-//                 paymentDate: new Date().toISOString(),
-//                 paymentReference: "",
-//             }).unwrap();
-
-//             toast.success(`₹${amount} added successfully.`);
-//             await refetch();
-//             onClose();
-//         } catch (err) {
-//             toast.error("Failed to create installment");
-//         }
-//     };
-//     return (
-//         <Dialog open={open} onOpenChange={onClose}>
-//             <DialogContent className="max-w-2xl">
-//                 <h2 className="text-lg font-semibold text-gray-800 mb-4">Add Installment</h2>
-//                 {payment && (
-//                     <div className="space-y-4 text-sm text-gray-700">
-//                         <div className="grid grid-cols-2 gap-4">
-//                             <p><strong>Bill No:</strong> {payment.billNumber}</p>
-//                             <p><strong>Date:</strong> {new Date(payment.createdAt).toLocaleDateString()}</p>
-//                             <p><strong>Total:</strong> ₹{payment.totalAmount}</p>
-//                             <p><strong>Paid:</strong> ₹{payment.paidAmount}</p>
-//                             <p><strong>Pending:</strong> ₹{payment.pendingAmount}</p>
-//                             <p><strong>Mode:</strong> {payment.paymentMode}</p>
-//                             <p><strong>Status:</strong> {payment.paymentStatus}</p>
-//                         </div>
-
-//                         <div>
-//                             <Label htmlFor="amount">Enter Installment Amount</Label>
-//                             <Input
-//                                 id="amount"
-//                                 type="number"
-//                                 placeholder="₹ Amount"
-//                                 value={amount}
-//                                 onChange={(e) => setAmount(e.target.value)}
-//                                 className="mt-1"
-//                             />
-//                         </div>
-
-//                         <div className="flex justify-end gap-2 pt-4">
-//                             <Button variant="outline" onClick={onClose}>
-//                                 Cancel
-//                             </Button>
-//                             <Button className="bg-blue-600 text-white hover:bg-blue-700" onClick={handleSubmit}>
-//                                 Submit
-//                             </Button>
-//                         </div>
-//                     </div>
-//                 )}
-//             </DialogContent>
-//         </Dialog>
-//     );
-// };
-
-// export default AddInstallmentModal;
 import { Dialog, DialogContent } from "../../components/ui/dialog";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
@@ -278,7 +195,7 @@ const AddInstallmentModal = ({
                             )}
                         </div>
 
-                        <div>
+                        {/* <div>
                             <Label className="block text-sm font-medium text-gray-700 mb-1">
                                 Select Payment Mode
                             </Label>
@@ -310,10 +227,44 @@ const AddInstallmentModal = ({
                                 </p>
                             )}
 
+                        </div> */}
+
+
+                        <div>
+                            <Label className="block text-sm font-medium text-gray-700 mb-1">
+                                Select Payment Mode
+                            </Label>
+
+                            <Controller
+                                name="paymentMode"
+                                control={control}
+                                defaultValue={payment?.paymentMode || "Cash"}
+                                rules={{ required: "Select payment mode" }}
+                                render={({ field }) => (
+                                    <div className="flex items-center gap-4 mt-2 flex-wrap">
+                                        {["Cash", "UPI", "Bank Transfer", "Credit", "Other"].map((mode) => (
+                                            <label key={mode} className="flex items-center gap-2">
+                                                <input
+                                                    type="radio"
+                                                    value={mode}
+                                                    checked={field.value === mode}
+                                                    onChange={() => field.onChange(mode)}
+                                                    className="accent-blue-600"
+                                                />
+                                                {mode}
+                                            </label>
+                                        ))}
+                                    </div>
+                                )}
+                            />
+
+                            {errors.paymentMode && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.paymentMode.message as string}
+                                </p>
+                            )}
                         </div>
 
-
-                        {/* Buttons */}
                         <div className="flex justify-end space-x-3 pt-4 border-t mt-4">
                             <Button
                                 type="button"

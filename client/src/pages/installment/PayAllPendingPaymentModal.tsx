@@ -109,7 +109,7 @@ const PayAllPendingPaymentModal = ({
 
     return (
         <>
-            <div className="mt-4">
+            <div className="mt-4 flex justify-end">
                 <Button
                     className="bg-green-600 hover:bg-green-700 text-white"
                     onClick={() => {
@@ -171,7 +171,7 @@ const PayAllPendingPaymentModal = ({
                     </div>
 
 
-                    <div className="mt-4">
+                    {/* <div className="mt-4">
                         <Label className="text-sm font-medium text-gray-700 mb-1">
                             Select Payment Mode
                         </Label>
@@ -202,8 +202,44 @@ const PayAllPendingPaymentModal = ({
                                 {errors.paymentMode.message}
                             </p>
                         )}
-                    </div>
+                    </div> */}
 
+                    <div className="mt-4">
+                        <Label className="text-sm font-medium text-gray-700 mb-1">
+                            Select Payment Mode
+                        </Label>
+
+                        <Controller
+                            name="paymentMode"
+                            control={control}
+                            rules={{ required: "Select payment mode" }}
+                            render={({ field }) => (
+                                <div className="flex flex-wrap gap-4 mt-2">
+                                    {["Cash", "UPI", "Bank Transfer", "Credit", "Other"].map((mode) => (
+                                        <div key={mode} className="flex items-center gap-2">
+                                            <input
+                                                type="radio"
+                                                id={mode}
+                                                value={mode}
+                                                checked={field.value === mode}
+                                                onChange={() => field.onChange(mode)}
+                                                className="accent-blue-600"
+                                            />
+                                            <Label htmlFor={mode} className="text-sm">
+                                                {mode}
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        />
+
+                        {errors.paymentMode && (
+                            <p className="text-red-500 text-sm mt-1">
+                                {errors.paymentMode.message}
+                            </p>
+                        )}
+                    </div>
 
                     <DialogFooter className="mt-6 flex justify-end gap-3">
                         <Button
@@ -261,7 +297,7 @@ const PayAllPendingPaymentModal = ({
 
 
                         <DialogFooter>
-                            <Button onClick={() => setShowReceipt(false)} className="bg-blue-600 text-white">
+                            <Button onClick={() => setShowReceipt(false)} className=" text-white">
                                 Close
                             </Button>
                         </DialogFooter>

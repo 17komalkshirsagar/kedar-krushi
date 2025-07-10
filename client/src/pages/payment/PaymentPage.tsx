@@ -26,7 +26,7 @@ import {
     DialogDescription,
     DialogFooter,
 } from "../../components/ui/dialog";
-
+import { GiCardboardBox, GiPayMoney } from "react-icons/gi";
 
 
 
@@ -235,7 +235,15 @@ const PaymentPage = () => {
     }, [isError,]);
     if (isLoading) return <Loader />;
     return (
-        <Card className="max-w-4xl mx-auto mt-5 p-4">
+
+        <Card className="max-w-4xl mx-auto mt-4 p-4">
+            <CardHeader>
+                <div className="flex justify-center items-center space-x-2 text-center">
+                    <GiCardboardBox className="text-yellow-700" size={22} />
+                    <GiPayMoney className="text-green-700" size={22} />
+                    <CardTitle> Product & Payment</CardTitle>
+                </div>
+            </CardHeader>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4 text-center">
                 <div className="border rounded p-3 shadow-sm bg-blue-50">
                     <p className="text-sm text-gray-500">Total Products</p>
@@ -256,9 +264,7 @@ const PaymentPage = () => {
             </div>
 
 
-            <CardHeader>
-                <CardTitle>Add Payment</CardTitle>
-            </CardHeader>
+
             <CardContent>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     <div className="flex gap-4">
@@ -412,7 +418,7 @@ const PaymentPage = () => {
 
                                 <div>
                                     <Button
-                                        className="mt-2 bg-red-600"
+                                        className="mt-5 bg-red-600 text-white"
                                         type="button"
                                         variant="destructive"
                                         onClick={() => remove(index)}
@@ -427,7 +433,7 @@ const PaymentPage = () => {
                         <Button
                             type="button"
                             onClick={() => append({ productId: '', quantity: 1 })}
-                            className="mt-2 bg-blue-500"
+                            className="mt-2 bg-blue-500 text-white"
                         >
                             + Add Product
                         </Button>
@@ -464,8 +470,9 @@ const PaymentPage = () => {
                         </div>
                     </div>
 
-                    <div>
+                    {/* <div>
                         <Label>Payment Mode</Label>
+
                         <div className="flex gap-4 mt-2">
                             {['Cash', 'UPI', 'Bank Transfer', 'Credit', 'Other'].map((mode) => (
                                 <label key={mode} className="flex items-center gap-2">
@@ -480,15 +487,47 @@ const PaymentPage = () => {
                             ))}
                         </div>
                         {errors.paymentMode && <p className="text-red-500">{errors.paymentMode.message}</p>}
+                        <div className="flex justify-center mt-4">
+                            <Button
+                                type="submit"
+                                className="bg-green-600 text-white"
+                            >
+                                Submit Payment
+                            </Button>
+                        </div>
+
+                    </div> */}
+
+                    <div>
+                        <Label>Payment Mode</Label>
+
+                        <div className="flex items-center gap-4 mt-2 flex-wrap">
+                            {['Cash', 'UPI', 'Bank Transfer', 'Credit', 'Other'].map((mode) => (
+                                <label key={mode} className="flex items-center gap-2">
+                                    <input
+                                        type="radio"
+                                        value={mode}
+                                        {...register('paymentMode')}
+                                        className="accent-blue-600"
+                                    />
+                                    {mode}
+                                </label>
+                            ))}
+
+                            <Button
+                                type="submit"
+                                className="bg-green-600 text-white ml-auto"
+                            >
+                                Submit Payment
+                            </Button>
+                        </div>
+
+
+                        {errors.paymentMode && (
+                            <p className="text-red-500 mt-1">{errors.paymentMode.message}</p>
+                        )}
                     </div>
 
-
-                    <Button
-                        type="submit"
-                        className="mt-4 bg-green-600"
-                    >
-                        Submit Payment
-                    </Button>
 
                 </form>
 
