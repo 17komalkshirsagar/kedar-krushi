@@ -21,7 +21,6 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GoogleLogin } from '@react-oauth/google';
 import { useEffect } from "react";
-import { log } from "node:console";
 
 const loginSchema = z.object({
   email: z.string().email({ message: ' Please Enter Email or Invalid Email Address' }),
@@ -64,13 +63,13 @@ const LoginPage = () => {
   useEffect(() => {
     if (isAddSuccess) {
       toast.success('Login successfully');
-      navigate('/dashboard');
+      navigate('/admin');
     }
   }, [isAddSuccess, navigate]);
   useEffect(() => {
     if (isGoogleSuccess) {
       toast.success(' Google Login successfully');
-      navigate('/dashboard');
+      navigate('/admin');
     }
   }, [isGoogleSuccess, navigate]);
 

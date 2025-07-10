@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
 import { Briefcase } from 'lucide-react';
+import { toast } from 'sonner';
 
 import {
     useGetAllSuppliersQuery,
@@ -33,8 +34,9 @@ const SupplierTable = () => {
         limit: pagination.pageSize,
     });
 
-    const [blockSupplier] = useBlockSupplierMutation();
-    const [deleteSupplier] = useDeleteSupplierMutation();
+
+    const [blockSupplier, { isSuccess: isBlockSuccess, isError: isBlockError, isLoading: isBlockLoading }] = useBlockSupplierMutation();
+    const [deleteSupplier, { isSuccess: isDeleteSuccess, isError: isDeleteError, isLoading: isDeleteLoading }] = useDeleteSupplierMutation();
 
     const [
         updateSupplierStatus,
@@ -94,8 +96,8 @@ const SupplierTable = () => {
                     <span
                         onClick={handleStatusChange}
                         className={`cursor-pointer px-3 py-1 rounded-full text-sm font-semibold ${currentStatus === 'active'
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-red-100 text-red-800'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
                             }`}
                     >
                         {currentStatus === 'active' ? 'Active' : 'Inactive'}
@@ -111,7 +113,7 @@ const SupplierTable = () => {
                 return (
                     <div className="flex gap-3">
                         <button
-                            onClick={() => navigate(`/supplier-page/${row.original._id}`)}
+                            onClick={() => navigate(`/admin/supplier-page/${row.original._id}`)}
                             className="text-blue-600"
                         >
                             Edit
@@ -139,6 +141,37 @@ const SupplierTable = () => {
     }, [isSuccess, searchData]);
 
     if (isLoading) return <Loader />;
+    useEffect(() => {
+        if (isBlockSuccess) {
+            toast.success("Supplier blocked successfully");
+        }
+    }, [isBlockSuccess]);
+    useEffect(() => {
+        if (isBlockError) {
+            toast.error("Failed to block supplier");
+        }
+    }, [isBlockError]);
+    useEffect(() => {
+        if (isBlockLoading) {
+            toast.info("Blocking supplier...",);
+        }
+    }, [isBlockLoading]);
+    useEffect(() => {
+        if (isDeleteSuccess) {
+            toast.success("Supplier deleted successfully");
+        }
+    }, [isDeleteSuccess]);
+    useEffect(() => {
+        if (isDeleteError) {
+            toast.error("Failed to delete supplier");
+        }
+    }, [isDeleteError]);
+    useEffect(() => {
+        if (isDeleteLoading) {
+            toast.info("Deleting supplier...",);
+
+        }
+    }, [isDeleteLoading]);
 
     return (
         <>
@@ -159,7 +192,7 @@ const SupplierTable = () => {
                         className="border px-3 py-1 rounded-md"
                     />
                     <button
-                        onClick={() => navigate('/supplier-page')}
+                        onClick={() => navigate('/admin/supplier-page')}
                         className="bg-indigo-600 text-white px-4 py-2 rounded-md"
                     >
                         Add

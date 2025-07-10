@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -70,14 +70,14 @@ const CustomerPage = () => {
     useEffect(() => {
         if (isAddSuccess) {
             toast.success('Customer created successfully')
-            navigate('/customer-table')
+            navigate('/admin/customer-table')
         }
     }, [isAddSuccess, navigate])
 
     useEffect(() => {
         if (isUpdateSuccess) {
             toast.success('Customer updated successfully')
-            navigate('/customer-table')
+            navigate('/admin/customer-table')
         }
     }, [isUpdateSuccess])
 

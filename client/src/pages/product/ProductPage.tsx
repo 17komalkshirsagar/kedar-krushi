@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -136,14 +136,14 @@ const ProductPage = () => {
     useEffect(() => {
         if (isAddSuccess) {
             toast.success('Product added successfully');
-            navigate('/product-table');
+            navigate('/admin/product-table');
         }
     }, [isAddSuccess, navigate]);
 
     useEffect(() => {
         if (isUpdateSuccess) {
             toast.success('Product updated successfully');
-            navigate('/product-table');
+            navigate('/admin/product-table');
         }
     }, [isUpdateSuccess]);
 

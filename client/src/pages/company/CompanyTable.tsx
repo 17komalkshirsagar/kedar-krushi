@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
-import * as ToastPrimitives from "@radix-ui/react-toast"
 import { Briefcase } from 'lucide-react';
 import {
     useBlockCompanyMutation,
@@ -9,10 +8,12 @@ import {
     useGetAllCompaniesQuery,
     useUpdateCompanyStatusMutation,
 } from '../../redux/apis/company.api';
-import { Toast } from '../../components/ui/toast';
+// import { Toast } from '../../components/ui/toast';
 import Loader from '../../components/ui/Loader';
 import TableData from '../../components/ui/TableData';
 import { useDebounce } from '../../utils/useDebounce';
+import { toast } from 'sonner';
+import { Toast } from '../../components/ui/toast';
 
 const CompanyTable = () => {
     const navigate = useNavigate();
@@ -30,9 +31,11 @@ const CompanyTable = () => {
         page: pagination.pageIndex + 1,
         limit: pagination.pageSize,
     });
+    const [blockCompany, { isSuccess: isBlockSuccess, isError: isBlockError, isLoading: isBlockLoading }] = useBlockCompanyMutation();
+    const [deleteCompany, { isSuccess: isDeleteSuccess, isError: isDeleteError, isLoading: isDeleteLoading }] = useDeleteCompanyMutation();
 
-    const [blockCompany] = useBlockCompanyMutation();
-    const [deleteCompany] = useDeleteCompanyMutation();
+
+
     const [
         updateStatus,
         {
@@ -91,6 +94,43 @@ const CompanyTable = () => {
                     });
                 };
 
+                useEffect(() => {
+                    if (isBlockSuccess) {
+                        toast.success("Company blocked successfully");
+                    }
+                }, [isBlockSuccess]);
+                useEffect(() => {
+                    if (isDeleteSuccess) {
+                        toast.success("Company deleted successfully");
+                    }
+                }, [isDeleteSuccess]);
+                useEffect(() => {
+                    if (isBlockError) {
+                        toast.error(" Failed to block company");
+                    }
+                }, [isBlockError]);
+
+                useEffect(() => {
+                    if (isDeleteError) {
+                        toast.error(" Company delete successfully");
+                    }
+                }, [isDeleteError,]);
+
+                useEffect(() => {
+                    if (isBlockLoading) {
+                        toast.info("Blocking company...",)
+                    }
+                }, [isBlockLoading]);
+
+
+                useEffect(() => {
+                    if (isDeleteLoading) {
+                        toast.info("Blocking company...",);
+
+                    }
+                }, [isDeleteLoading]);
+
+
                 return (
                     <span
                         onClick={handleStatusChange}
@@ -112,7 +152,7 @@ const CompanyTable = () => {
                 return (
                     <div className="flex gap-3">
                         <button
-                            onClick={() => navigate(`/company-page/${row.original._id}`)}
+                            onClick={() => navigate(`/admin/company-page/${row.original._id}`)}
                             className="text-blue-600"
                         >
                             Edit
@@ -161,7 +201,7 @@ const CompanyTable = () => {
                         className="border px-3 py-1 rounded-md"
                     />
                     <button
-                        onClick={() => navigate('/company/add')}
+                        onClick={() => navigate('/admin/company/add')}
                         className="bg-indigo-600 text-white px-4 py-2 rounded-md"
                     >
                         Add

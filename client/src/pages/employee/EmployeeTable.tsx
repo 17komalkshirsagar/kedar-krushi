@@ -160,7 +160,7 @@ const EmployeeTable = () => {
                 return (
                     <div className="flex gap-3">
                         <button
-                            onClick={() => navigate(`/employee-page/${row.original._id}`)}
+                            onClick={() => navigate(`/admin/employee-page/${row.original._id}`)}
                             className="text-blue-600"
                         >
                             Edit
@@ -205,7 +205,7 @@ const EmployeeTable = () => {
                         className="border px-3 py-1 rounded-md"
                     />
                     <button
-                        onClick={() => navigate('/employee-page')}
+                        onClick={() => navigate('/admin/employee-page')}
                         className="bg-indigo-600 text-white px-4 py-2 rounded-md"
                     >
                         Add

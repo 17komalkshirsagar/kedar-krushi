@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { useNavigate, useParams } from 'react-router-dom'
-
-import { Input } from '../../components/ui/input'
-import { Button } from '../../components/ui/button'
 import { Label } from '../../components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card'
 import { Textarea } from '../../components/ui/textarea'
@@ -19,6 +16,7 @@ import {
 } from '../../redux/apis/delivery.api'
 
 import { useGetAllPaymentsQuery } from '../../redux/apis/payment.api'
+import { Button } from '@headlessui/react'
 
 const deliverySchema = z.object({
     payment: z.string().min(1, 'Payment is required'),
@@ -162,7 +160,7 @@ const DeliveryPage = () => {
 
                         {/* Buttons */}
                         <div className="flex justify-end gap-3 pt-4">
-                            <Button type="button" variant="outline" className="bg-red-600 text-white" onClick={() => reset()}>
+                            <Button type="button" className="bg-red-600 text-white border border-gray-300" onClick={() => reset()}>
                                 Cancel
                             </Button>
                             <Button className="bg-green-600 text-white" type="submit" disabled={isLoading}>

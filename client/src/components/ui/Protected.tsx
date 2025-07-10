@@ -11,8 +11,7 @@ const Protected = ({ roles = ['admin'], compo, }: { roles?: string[]; compo: Rea
     }
 
     return roles.includes(admin.role)
-        ? <>{compo}</>
-        : <Navigate to="/unauthorized" replace />;
+        ? <>{compo}</> : <Navigate to="/unauthorized" replace />;
 };
 
 export default Protected;

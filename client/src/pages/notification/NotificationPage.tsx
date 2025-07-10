@@ -47,8 +47,9 @@ const NotificationPage = () => {
     const [selectedCustomerId, setSelectedCustomerId] = useState(locationCustomerId || '');
     const [selectedCustomerMobile, setSelectedCustomerMobile] = useState('');
 
-    const [createNotification] = useCreateNotificationLogMutation();
-    const [updateNotification] = useUpdateNotificationLogMutation();
+
+    const [createNotification, { isSuccess: isCreateSuccess, isError: isCreateError, isLoading: isCreateLoading }] = useCreateNotificationLogMutation();
+    const [updateNotification, { isSuccess: isUpdateSuccess, isError: isUpdateError, isLoading: isUpdateLoading }] = useUpdateNotificationLogMutation();
 
     const { data: notificationData } = useGetNotificationLogByIdQuery(id!, { skip: !id });
     const { data: customers } = useGetAllCustomersQuery({});
@@ -121,6 +122,41 @@ const NotificationPage = () => {
             setSelectedCustomerMobile('');
         }
     }, [id, locationCustomerId, reset]);
+    useEffect(() => {
+        if (isCreateSuccess) {
+            toast.success("Notification created successfully");
+        }
+    }, [isCreateSuccess]);
+    useEffect(() => {
+        if (isCreateError) {
+            toast.error("Failed to create notification");
+        }
+    }, [isCreateError]);
+    useEffect(() => {
+        if (isCreateLoading) {
+            toast.info("Creating notification...",);
+        }
+    }, [isCreateLoading]);
+    useEffect(() => {
+        if (isCreateLoading) {
+            toast.dismiss("create-notification");
+        }
+    }, [isCreateLoading]);
+    useEffect(() => {
+        if (isUpdateSuccess) {
+            toast.success("Notification updated successfully");
+        }
+    }, [isUpdateSuccess]);
+    useEffect(() => {
+        if (isUpdateError) {
+            toast.error("Failed to update notification");
+        }
+    }, [isUpdateError]);
+    useEffect(() => {
+        if (isUpdateLoading) {
+            toast.info("Updating notification...",);
+        }
+    }, [isUpdateLoading]);
 
     const onSubmit = async (data: NotificationFormData) => {
         try {
@@ -201,7 +237,8 @@ const NotificationPage = () => {
                             <div className="flex gap-3">
                                 <Button
                                     type="button"
-                                    className="bg-red-700"
+
+                                    className="bg-red-600 "
                                     variant="outline"
                                     onClick={() => {
                                         reset({
@@ -241,7 +278,7 @@ const NotificationPage = () => {
                                     <FaWhatsapp className="text-white" />
                                 </Button>
 
-                                <Button className="bg-green-700" type="submit">
+                                <Button className="bg-green-500 " type="submit">
                                     {id ? 'Update' : 'Send'}
                                 </Button>
                             </div>

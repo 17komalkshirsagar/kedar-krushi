@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,9 +17,6 @@ import { Button } from '../../components/ui/button'
 import { Label } from '../../components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card'
 import { Textarea } from '../../components/ui/textarea'
-import * as ToastPrimitives from "@radix-ui/react-toast"
-import { Toast } from '../../components/ui/toast'
-
 
 const companySchema = z.object({
     name: z.string().min(1, "Company name is required"),
@@ -73,7 +70,7 @@ const CompanyPage = () => {
     useEffect(() => {
         if (isAddSuccess) {
             toast.success('Company created successfully');
-            navigate('/company-table');
+            navigate('/admin/company-table');
         }
     }, [isAddSuccess, navigate]);
     useEffect(() => {
@@ -100,21 +97,7 @@ const CompanyPage = () => {
             addCompany(data as any)
         }
     }
-    // const onSubmit = (data: CompanyFormData) => {
-    //     const formData = new FormData();
 
-    //     Object.entries(data).forEach(([key, value]) => {
-    //         if (value) {
-    //             formData.append(key, value);
-    //         }
-    //     });
-
-    //     if (id) {
-    //         updateCompany({ id, companyData: formData });
-    //     } else {
-    //         addCompany(formData);
-    //     }
-    // };
 
     return (
         <div className="max-w-3xl mx-auto py-8">

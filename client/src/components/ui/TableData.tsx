@@ -207,22 +207,7 @@ const TableData = <T,>({
                                 </tr>
                             ))}
                         </thead>
-                        {/* <tbody className="divide-y divide-gray-200 bg-white">
-                            {table.getRowModel().rows.map((row: any) => (
-                                <tr
-                                    key={row.id}
-                                >
-                                    {row.getVisibleCells().map((cell: any) => (
-                                        <td
-                                            key={cell.id}
-                                            className="pl-4 pr-3 whitespace-nowrap py-5 text-sm text-gray-500"
-                                        >
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))}
-                        </tbody> */}
+
 
                         <tbody className="divide-y divide-gray-200 bg-white">
                             {table.getRowModel().rows.map((row: any) => (

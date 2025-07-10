@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
 import { Briefcase } from 'lucide-react';
+import { toast } from 'sonner';
 
 import {
     useGetAllCustomersQuery,
@@ -33,8 +34,8 @@ const CustomerTable = () => {
     });
     const [expandedCustomerId, setExpandedCustomerId] = useState<string | null>(null);
 
-    const [blockCustomer] = useBlockCustomerMutation();
-    const [deleteCustomer] = useDeleteCustomerMutation();
+    const [blockCustomer, { isSuccess: isBlockSuccess, isError: isBlockError, isLoading: isBlockLoading }] = useBlockCustomerMutation();
+    const [deleteCustomer, { isSuccess: isDeleteSuccess, isError: isDeleteError, isLoading: isDeleteLoading }] = useDeleteCustomerMutation();
     const [
         updateCustomerStatus,
         {
@@ -95,7 +96,41 @@ const CustomerTable = () => {
                         status: currentStatus === 'active' ? 'inactive' : 'active',
                     });
                 };
+                useEffect(() => {
+                    if (isBlockSuccess) {
+                        toast.success("Customer blocked successfully");
+                    }
+                }, [isBlockSuccess]);
+                useEffect(() => {
+                    if (isDeleteSuccess) {
+                        toast.success("Customer deleted successfully");
+                    }
+                }, [isDeleteSuccess]);
+                useEffect(() => {
+                    if (isBlockError) {
+                        toast.error(" Failed to block Customer");
+                    }
+                }, [isBlockError]);
 
+                useEffect(() => {
+                    if (isDeleteError) {
+                        toast.error(" Customer delete successfully");
+                    }
+                }, [isDeleteError,]);
+
+                useEffect(() => {
+                    if (isBlockLoading) {
+                        toast.info("Blocking Customer...",)
+                    }
+                }, [isBlockLoading]);
+
+
+                useEffect(() => {
+                    if (isDeleteLoading) {
+                        toast.info("Blocking Customer...",);
+
+                    }
+                }, [isDeleteLoading]);
                 return (
                     <span
                         onClick={handleStatusChange}
@@ -136,7 +171,7 @@ const CustomerTable = () => {
                             {isBlocked ? 'Unblock' : 'Block'}
                         </button>
                         <button
-                            onClick={() => navigate('/notification-page', {
+                            onClick={() => navigate('/admin/notification-page', {
                                 state: { customerId: row.original._id }
                             })}
                             className="bg-blue-600 text-white px-4 py-2 rounded"
@@ -177,7 +212,7 @@ const CustomerTable = () => {
                         className="border px-3 py-1 rounded-md"
                     />
                     <button
-                        onClick={() => navigate('/customer/add')}
+                        onClick={() => navigate('/admin/customer/add')}
                         className="bg-indigo-600 text-white px-4 py-2 rounded-md"
                     >
                         Add

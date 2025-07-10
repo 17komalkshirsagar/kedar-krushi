@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -81,14 +81,14 @@ const EmployeePage = () => {
     useEffect(() => {
         if (isAddSuccess) {
             toast.success('Employee created successfully');
-            navigate('/employee-table');
+            navigate('/admin/employee-table');
         }
     }, [isAddSuccess, navigate]);
 
     useEffect(() => {
         if (isUpdateSuccess) {
             toast.success('Employee updated successfully');
-            navigate('/employee-table');
+            navigate('/admin/employee-table');
         }
     }, [isUpdateSuccess]);
 
@@ -105,6 +105,8 @@ const EmployeePage = () => {
             addEmployee(data);
         }
     };
+
+
 
     return (
         <div className="max-w-3xl mx-auto py-8">

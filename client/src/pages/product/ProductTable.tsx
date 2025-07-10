@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
 import { Package } from 'lucide-react';
@@ -192,7 +192,7 @@ const ProductTable = () => {
                 return (
                     <div className="flex gap-3">
                         <button
-                            onClick={() => navigate(`/product-page/${row.original._id}`)}
+                            onClick={() => navigate(`/admin/product-page/${row.original._id}`)}
                             className="text-blue-600"
                         >
                             Edit
@@ -240,7 +240,7 @@ const ProductTable = () => {
                         className="border px-3 py-1 rounded-md"
                     />
                     <button
-                        onClick={() => navigate('/product/add')}
+                        onClick={() => navigate('/admin/product/add')}
                         className="bg-indigo-600 text-white px-4 py-2 rounded-md"
                     >
                         Add

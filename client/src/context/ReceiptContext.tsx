@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const ReceiptContext = createContext<any>(null);
 
-// ✅ Only this line is changed — added type for children
 export const ReceiptProvider = ({ children }: { children: React.ReactNode }) => {
     const [receipt, setReceiptState] = useState(() => {
         const stored = localStorage.getItem('receipt');
