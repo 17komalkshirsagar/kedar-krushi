@@ -34,11 +34,21 @@ app.use(morgan("dev"))
 // }))
 
 app.use(express.urlencoded({ extended: true }))
-app.use(cors({
-    origin: "https://kedar-client.vercel.app/",
-    credentials: true
-}))
+const allowedOrigins = [
+    "http://localhost:3000",
+    "https://kedar-client.vercel.app"
+];
 
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
+}));
 app.use(passport.initialize())
 
 
