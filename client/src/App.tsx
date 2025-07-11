@@ -10,6 +10,7 @@ import SuspenseWrapper from './components/ui/SuspenseWrapper';
 import Layout from './pages/layout/Layout';
 import AdminLayout from './pages/AdminLayout/AdminLayout';
 import NotFoundPage from './pages/notification/NotFoundPage';
+import LogoutPage from './auth/login/LogoutPage';
 
 
 
@@ -75,6 +76,8 @@ const App = () => {
         <Route path="/send-otp" element={<SuspenseWrapper><SendOtpPage /></SuspenseWrapper>} />
         <Route path="/forgot-password" element={<SuspenseWrapper><ForgotPasswordPage /></SuspenseWrapper>} />
         <Route path="/reset-password" element={<SuspenseWrapper><ResetPasswordPage /></SuspenseWrapper>} />
+        <Route path="/logout" element={<SuspenseWrapper><LogoutPage /></SuspenseWrapper>} />
+
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={withWrapper(<Dashboard />)} />

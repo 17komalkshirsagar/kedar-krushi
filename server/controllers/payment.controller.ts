@@ -26,15 +26,12 @@ export const createPayment = asyncHandler(async (req: Request, res: Response, ne
         product.soldQuantity = (product.soldQuantity || 0) + item.quantity;
         await product.save();
     }
-    // await invalidateCache("products:*");
 
-
-    await invalidateCache("*product*")
     const result = await Payment.create(data);
     const populatedPayment = await Payment.findById(result._id)
         .populate("customer")
         .populate("products.product");
-    res.status(200).json({ message: "Payment created successfully", billNumber: result.billNumber, year: result.year, result: populatedPayment, });
+    res.status(200).json({ message: "Payment created successfu  lly", billNumber: result.billNumber, year: result.year, result: populatedPayment, });
 });
 
 // Get All Payments

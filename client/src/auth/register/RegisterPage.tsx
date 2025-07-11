@@ -67,7 +67,7 @@ const RegisterPage = () => {
             toast.success("Lease created successfully!");
             navigate('/login');
         }
-    }, [isSuccess]);
+    }, [isSuccess, navigate]);
     useEffect(() => {
         if (isError) {
             toast.error('Registration failed');

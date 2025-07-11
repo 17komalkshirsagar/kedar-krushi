@@ -10,7 +10,7 @@ import {
     UserCircle,
     Bell,
     CreditCard,
-    ClipboardList,
+    ClipboardList, LogOut,
     ChevronsLeft,
     ChevronsRight,
 } from "lucide-react";
@@ -27,6 +27,7 @@ const links = [
     { label: "Notifications", to: "/admin/notification-page", icon: <Bell size={22} /> },
     { label: "Bill Payment", to: "/admin/bill", icon: <CreditCard size={22} /> },
     { label: "Installments", to: "/admin/installment", icon: <ClipboardList size={22} /> },
+    { label: "Logout", to: "/admin/logout", icon: <LogOut size={22} className="text-red-600" /> },
 ];
 
 const Sidebar = () => {

@@ -65,15 +65,13 @@ export const signOut = asyncHandler(async (req: Request, res: Response, next: Ne
         return res.status(401).json({ message: "No token provided" });
     }
 
-    // const { adminId } = req.admin as IAdminProtected
-
     if (!req.admin) {
         return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const { adminId } = req.admin;
+    const { adminId } = req.admin as IAdminProtected;
 
-    await Admin.findByIdAndUpdate(adminId, { sessionToken: null })
+    await Admin.findByIdAndUpdate(adminId, { sessionToken: null });
 
     res.status(200).json({ message: "Logged out successfully" });
 });
