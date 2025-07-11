@@ -41,7 +41,7 @@ const SupplierPage = () => {
     const {
         register,
         handleSubmit,
-        setValue,
+
         reset,
         formState: { errors },
     } = useForm<SupplierFormData>({

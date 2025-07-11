@@ -28,12 +28,6 @@ import { useGetAllCompaniesQuery } from '../../redux/apis/company.api';
 
 
 
-
-
-
-
-
-
 const productSchema = z.object({
     name: z.string().min(1),
     category: z.enum(['Pesticide', 'Seed', 'Fertilizer', 'Other']),
@@ -107,6 +101,7 @@ const ProductPage = () => {
         skip: !id,
     });
     const [currentStock, setCurrentStock] = useState<number>(0);
+    console.log("currentStock::", currentStock);
 
     useEffect(() => {
         if (id && productData && companyData && data) {

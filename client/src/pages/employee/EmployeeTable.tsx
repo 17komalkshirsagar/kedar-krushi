@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Briefcase } from 'lucide-react'
@@ -56,6 +56,7 @@ const EmployeeTable = () => {
     }
 
     const handleBlockEmployee = async (id: string, isBlocked: boolean) => {
+        console.log("Is Blocked:", isBlocked);
         try {
             await blockEmployee(id)
             refetch()
@@ -71,8 +72,7 @@ const EmployeeTable = () => {
                 data: {
                     status: currentStatus === 'active' ? 'inactive' : 'active',
                 },
-            });
-            refetch();
+            }); refetch();
         } catch {
 
             console.log("Failed to update status");

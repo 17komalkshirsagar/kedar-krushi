@@ -12,7 +12,6 @@ import {
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
-import { RadioGroup, RadioGroupItem } from "../../components/ui/radio-group";
 import { toast } from "sonner";
 import { useAddAllInstallmentMutation } from "../../redux/apis/paymentInstallment.api";
 import { useForm, Controller } from "react-hook-form";
@@ -57,6 +56,7 @@ const PayAllPendingPaymentModal = ({
 
     const [payAll, { isSuccess: isAddSuccess, isError, isLoading }] = useAddAllInstallmentMutation();
     const combinedProducts = paymentData?.result?.flatMap((p: any) => p.products) || [];
+    console.log("combinedProducts::", combinedProducts);
 
     const {
         register,

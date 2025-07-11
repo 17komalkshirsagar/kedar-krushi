@@ -27,7 +27,7 @@ export default function ForgotPasswordPage() {
 
     const onSubmit = async ({ email }: ForgotPasswordFormData) => {
         try {
-            const res = await forgotPassword(email).unwrap();
+            await forgotPassword(email).unwrap();
         } catch (error: any) {
             console.log(error?.message || "Something went wrong");
         }

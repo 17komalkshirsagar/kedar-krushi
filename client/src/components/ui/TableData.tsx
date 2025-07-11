@@ -8,8 +8,9 @@ import {
     type ColumnDef,
     type PaginationState,
 } from "@tanstack/react-table";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import CustomerHistory from "../../pages/customer/CustomerHistory";
+import React from "react";
 
 interface TableProps<T> {
     data: T[];

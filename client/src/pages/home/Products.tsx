@@ -13,7 +13,7 @@ import {
   Search,
   Filter,
   Star,
-  MessageCircle,
+
   Grid,
   List,
   SlidersHorizontal

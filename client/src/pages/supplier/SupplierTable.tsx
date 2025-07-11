@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
 import { Briefcase } from 'lucide-react';
@@ -60,6 +60,8 @@ const SupplierTable = () => {
     };
 
     const handleBlockSupplier = async (id: string, currentBlockStatus: boolean) => {
+        console.log("currentBlockStatus:", currentBlockStatus);
+
         try {
             await blockSupplier(id);
             await refetch();

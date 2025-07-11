@@ -1,12 +1,5 @@
 
-
-
-
-
-
-
-
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Card, CardContent } from "../../components/ui/card";
 import { useSendReceiptEmailMutation } from "../../redux/apis/emailSendReceipt.api";
 

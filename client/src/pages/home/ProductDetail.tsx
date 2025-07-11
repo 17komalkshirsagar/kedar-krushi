@@ -12,7 +12,6 @@ import { FaWhatsapp } from "react-icons/fa";
 
 import {
   Star,
-  MessageCircle,
   Share2,
   ArrowLeft,
   Check,

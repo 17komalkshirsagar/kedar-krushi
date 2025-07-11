@@ -95,7 +95,7 @@ export const productApi = createApi({
             transformErrorResponse: (error: { status: number; data: { message: string } }) => error.data?.message,
             invalidatesTags: ["Product"],
         }),
-        getProductStats: builder.query<
+        getProductDashbaordStats: builder.query<
             { message: string; result: any[] },
             string
         >({
@@ -119,5 +119,5 @@ export const {
     useUpdateProductMutation,
     useDeleteProductMutation,
     useUpdateProductStatusMutation,
-    useBlockProductMutation, useSellProductMutation, useGetProductStatsQuery,
+    useBlockProductMutation, useSellProductMutation, useGetProductDashbaordStatsQuery,
 } = productApi;

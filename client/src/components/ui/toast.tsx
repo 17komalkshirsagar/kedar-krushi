@@ -1,9 +1,7 @@
-// toast.tsx
+
 "use client";
-import * as React from "react";
 import * as ToastPrimitives from "@radix-ui/react-toast";
 import { X } from "lucide-react";
-import { cn } from "../../lib/utils";
 
 export function Toast({ type = "success", message }: { type: string, message: string }) {
   return (

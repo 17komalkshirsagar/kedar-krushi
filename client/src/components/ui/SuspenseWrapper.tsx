@@ -1,5 +1,5 @@
 
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 
 const Loader = () => (
     <div className="flex justify-center items-center h-screen">

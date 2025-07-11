@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/utils"; // adjust if you don’t use this utility
+import { cn } from "./../../lib/utils"
 
 export interface ChartConfig {
     [key: string]: {

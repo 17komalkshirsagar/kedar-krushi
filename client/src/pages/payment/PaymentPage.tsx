@@ -1,9 +1,8 @@
 
 
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -19,14 +18,10 @@ import { useRef } from "react";
 import Receipt from './Receipt';
 import {
     Dialog,
-    DialogTrigger,
     DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-    DialogFooter,
 } from "../../components/ui/dialog";
 import { GiCardboardBox, GiPayMoney } from "react-icons/gi";
+import { useDebounce } from '../../utils/useDebounce';
 
 
 
@@ -46,24 +41,13 @@ const paymentSchema = z.object({
 });
 
 type PaymentFormSchema = z.infer<typeof paymentSchema>
-function useDebounce<T>(value: T, delay: number = 500): T {
-    const [debouncedValue, setDebouncedValue] = useState(value);
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedValue(value);
-        }, delay);
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [value, delay]);
-    return debouncedValue;
-}
+
 
 const PaymentPage = () => {
     const { data: customers } = useGetAllCustomersQuery({});
     const [receiptData, setReceiptData] = useState<any>(null);
 
-    const { data: products, refetch } = useGetAllProductsQuery({});
+    const { data: products, } = useGetAllProductsQuery({});
 
 
     const [createPayment, { isSuccess: isAddSuccess, isError, isLoading }] = useCreatePaymentMutation();
@@ -71,7 +55,7 @@ const PaymentPage = () => {
     const searchProductRef = useRef<HTMLInputElement>(null);
 
 
-    const navigate = useNavigate();
+
     const [searchMobile, setSearchMobile] = useState('');
     const [searchProduct, setSearchProduct] = useState('');
     const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
@@ -292,7 +276,7 @@ const PaymentPage = () => {
                             )}
 
                             {searchMobile && filteredCustomers.length > 0 && !selectedCustomer && (
-                                <div className="border rounded mt-2 max-h-40 overflow-y-auto bg-white shadow z-10 absolute w-full z-50">
+                                <div className="border rounded mt-2 max-h-40 overflow-y-auto bg-white shadow  absolute w-full z-50">
                                     {filteredCustomers.map((cust) => (
                                         <div
                                             key={cust._id}

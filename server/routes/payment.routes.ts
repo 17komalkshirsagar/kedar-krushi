@@ -12,5 +12,6 @@ paymentRouter
     .patch("/payment/status/:id", paymentController.updatePaymentStatus)
     .patch("/payment/block/:id", paymentController.blockPayment)
     .get("/summary", paymentController.getCustomerPaymentSummary)
-    .get("/payments/history/:customerId", paymentController.getCustomerPaymentHistory);
+    .get("/payments/history/:customerId", paymentController.getCustomerPaymentHistory)
+    .get("/payment/state", paymentController.getPaymentDashboardStats)
 export default paymentRouter;

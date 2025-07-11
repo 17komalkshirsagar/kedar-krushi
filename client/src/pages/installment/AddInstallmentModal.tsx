@@ -3,12 +3,11 @@ import { Dialog, DialogContent } from "../../components/ui/dialog";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
-import { RadioGroup, RadioGroupItem } from "../../components/ui/radio-group";
-import { toast } from "sonner";
 import { useCreateInstallmentMutation } from "../../redux/apis/paymentInstallment.api";
 import { useGetCustomerPaymentHistoryQuery } from "../../redux/apis/payment.api";
 import { useForm, Controller } from "react-hook-form";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 
 interface AddInstallmentModalProps {
@@ -85,6 +84,12 @@ const AddInstallmentModal = ({
             toast.error("Failed to create installment");
         }
     }, [isError]);
+
+    useEffect(() => {
+        if (isLoading) {
+            toast.info("Adding installment...");
+        }
+    }, [isLoading,]);
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="max-w-lg bg-white rounded-xl shadow-lg p-6 space-y-6">

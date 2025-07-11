@@ -20,12 +20,11 @@ import paymentRouter from "./routes/payment.routes";
 import receiptEmailRouter from "./routes/receipt.routes";
 import batchRouter from "./routes/batch.routes";
 import paymentInstallmentRouter from "./routes/paymentinstallment.router";
-
 // import rateLimit from "express-rate-limit";
 
 dotenv.config()
 app.use(express.json())
-app.use(express.static("invoices"))
+// app.use(express.static("dist"))
 app.use(morgan("dev"))
 
 // app.use(rateLimit({
@@ -36,11 +35,19 @@ app.use(morgan("dev"))
 
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
-    origin: true,
+    origin: "*",
     credentials: true
 }))
 
 app.use(passport.initialize())
+
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "https://kedar-client-fplsxt9pv-17komalkshirsagars-projects.vercel.app");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    next();
+});
 
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/company", companyRouter)
@@ -55,7 +62,6 @@ app.use("/api/v1/send-receipt", receiptEmailRouter)
 app.use("/api/v1/batch", batchRouter)
 app.use("/api/v1/payment-installment", paymentInstallmentRouter)
 
-// app.use("/api/v1/appointment", protectedRoute, checkSubscription, appointmentRouter)
 
 
 redisClient.on("connect", () => {
@@ -63,6 +69,7 @@ redisClient.on("connect", () => {
 })
 
 app.use((req: Request, res: Response, next: NextFunction) => {
+    // res.sendFile(path.join(__dirname, "dist", "index.html"))
     res.status(404).json({ message: "Resource not found", });
 })
 
@@ -75,10 +82,7 @@ mongoose.connect(process.env.MONGO_URL || "").catch((err) => {
     process.exit(1);
 });
 
-cron.schedule("0 0 * * *", async () => {
-    // await sendSubscriptionReminders()
-    // await checkAndDeactivateExpiredClinics();
-});
+
 
 const PORT = process.env.PORT || 5000
 mongoose.connection.once("open", async () => {

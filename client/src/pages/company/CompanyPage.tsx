@@ -41,7 +41,7 @@ const CompanyPage = () => {
     const {
         register,
         handleSubmit,
-        setValue,
+        // setValue,
         reset,
         formState: { errors }
     } = useForm<CompanyFormData>({

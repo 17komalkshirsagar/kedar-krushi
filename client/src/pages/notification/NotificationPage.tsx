@@ -1,14 +1,14 @@
 
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { FaWhatsapp } from 'react-icons/fa';
 
-import { Input } from '../../components/ui/input';
+
 import { Button } from '../../components/ui/button';
 import { Label } from '../../components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
@@ -34,7 +34,6 @@ type NotificationFormData = z.infer<typeof schema>;
 
 const NotificationPage = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const location = useLocation();
     const { customerId: locationCustomerId } = location.state || {};
 

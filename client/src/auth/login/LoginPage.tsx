@@ -45,7 +45,7 @@ const LoginPage = () => {
   const handleGoogleLogin = async (googleResponse: any) => {
     try {
       const { credential } = googleResponse;
-      const response = await continueWithGoogle({ credential }).unwrap();
+      await continueWithGoogle({ credential }).unwrap();
     } catch (error: any) {
       console.log(error?.message || "Google login failed");
     }
@@ -53,7 +53,7 @@ const LoginPage = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const res = await signIn(data).unwrap();
+      await signIn(data).unwrap();
     } catch (error: any) {
       console.log(' error?.message ||  Login failed. Please try again.');
     }

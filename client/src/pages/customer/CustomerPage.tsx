@@ -41,13 +41,12 @@ const CustomerPage = () => {
     const {
         register,
         handleSubmit,
-        setValue,
+        // setValue,
         reset,
-        formState: { errors }
-    } = useForm<CustomerFormData>({
-        resolver: zodResolver(customerSchema),
-        defaultValues
-    })
+        formState: { errors } } = useForm<CustomerFormData>({
+            resolver: zodResolver(customerSchema),
+            defaultValues
+        })
 
     const [addCustomer, { isSuccess: isAddSuccess, isError: isAddError }] = useCreateAddCustomerMutation()
     const [updateCustomer, { isSuccess: isUpdateSuccess }] = useUpdateCustomerMutation()

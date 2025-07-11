@@ -5,7 +5,7 @@ import redisClient from "../services/redisClient";
 import { invalidateCache } from "../utils/redisMiddleware";
 import { createProductRules } from "../rules/product.rules";
 import { Product } from "../models/product";
-import { startOfWeek, endOfWeek, startOfMonth, endOfMonth } from "date-fns";
+import { startOfWeek, endOfWeek, startOfMonth, endOfYear, startOfYear, endOfMonth } from "date-fns";
 
 
 export const createProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -199,22 +199,40 @@ export const blockProduct = asyncHandler(async (req: Request, res: Response, nex
 
 
 
-
-
-export const getProductStats = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const getProductDashbaordStats = asyncHandler(async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<any> => {
     const { type = "monthly" } = req.query;
 
     let startDate: Date;
     let endDate: Date = new Date();
+    let groupFormat: string;
 
-    if (type === "weekly") {
-        startDate = startOfWeek(new Date());
-        endDate = endOfWeek(new Date());
-    } else if (type === "monthly") {
-        startDate = startOfMonth(new Date());
-        endDate = endOfMonth(new Date());
-    } else {
-        startDate = new Date(new Date().getFullYear(), 0, 1);
+    switch (type) {
+        case "daily":
+            startDate = new Date();
+            startDate.setHours(0, 0, 0, 0);
+            groupFormat = "%Y-%m-%d";
+            break;
+        case "weekly":
+            startDate = startOfWeek(new Date());
+            endDate = endOfWeek(new Date());
+            groupFormat = "%Y-%m-%d";
+            break;
+        case "monthly":
+            startDate = startOfMonth(new Date());
+            endDate = endOfMonth(new Date());
+            groupFormat = "%Y-%m-%d";
+            break;
+        case "yearly":
+            startDate = startOfYear(new Date());
+            endDate = endOfYear(new Date());
+            groupFormat = "%Y-%m";
+            break;
+        default:
+            return res.status(400).json({ message: "Invalid type provided" });
     }
 
     const result = await Product.aggregate([
@@ -228,17 +246,28 @@ export const getProductStats = asyncHandler(async (req: Request, res: Response, 
             $group: {
                 _id: {
                     $dateToString: {
-                        format: type === "weekly" ? "%Y-%m-%d" : "%Y-%m",
+                        format: groupFormat,
                         date: "$createdAt",
                     },
                 },
                 totalProducts: { $sum: 1 },
                 totalSoldQuantity: { $sum: "$soldQuantity" },
                 totalStock: { $sum: "$stock" },
+                totalRemainingStock: { $sum: "$remainingStock" },
+                totalRevenue: {
+                    $sum: { $multiply: ["$soldQuantity", "$sellingPrice"] },
+                },
             },
         },
         { $sort: { _id: 1 } },
     ]);
 
-    res.status(200).json({ message: "Stats fetched", result });
+    res.status(200).json({
+        message: "Stats fetched",
+        result,
+    });
 });
+
+
+
+

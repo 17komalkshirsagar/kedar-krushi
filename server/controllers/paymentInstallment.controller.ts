@@ -41,7 +41,7 @@ export const createaddInstallmentByBillNumber = asyncHandler(async (req: Request
     res.status(201).json({ message: 'Installment added successfully', result });
 });
 
-//  Get All Installments (with search & pagination)
+//  Get All Installments 
 export const getInstallments = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const { page = 1, limit = 10, searchQuery = '' } = req.query;
 
@@ -96,7 +96,7 @@ export const getInstallments = asyncHandler(async (req: Request, res: Response, 
     res.status(200).json({ message: 'Installments fetched successfully', result, pagination });
 });
 
-//  Get Single Payment with Installments
+//  Get Single Payment 
 export const getInstallmentById = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const { id } = req.params;
 
@@ -356,5 +356,10 @@ export const payPendingBillsInOrder = asyncHandler(async (req: Request, res: Res
         result: createdInstallments, payments: populatedPayments, billNumber: receiptBillNumber,
     });
 });
+
+
+
+
+
 
 

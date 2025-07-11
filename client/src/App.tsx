@@ -2,7 +2,7 @@
 
 
 import { lazy } from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import SessionExpiredModal from './components/ui/SessionExpiredModal';
 import Protected from './components/ui/Protected';
 import ErrorBoundary from './components/ui/ErrorBoundary';
@@ -77,7 +77,6 @@ const App = () => {
         <Route path="/reset-password" element={<SuspenseWrapper><ResetPasswordPage /></SuspenseWrapper>} />
 
         <Route path="/admin" element={<AdminLayout />}>
-          {/* <Route path="admin" element={<><Outlet /></>}> */}
           <Route index element={withWrapper(<Dashboard />)} />
           <Route path="company" element={withWrapper(<CompanyPage />)} />
           <Route path="company/:id" element={withWrapper(<CompanyPage />)} />
@@ -116,55 +115,3 @@ const App = () => {
 };
 
 export default App;
-
-{/* <Routes>
-       
-        <Route path="/" element={<SuspenseWrapper><Home /></SuspenseWrapper>} />
-        <Route path="/contact" element={<SuspenseWrapper><Contact /></SuspenseWrapper>} />
-        <Route path="/about" element={<SuspenseWrapper><About /></SuspenseWrapper>} />
-        <Route path="products/:id" element={<SuspenseWrapper><ProductDetail /></SuspenseWrapper>} />
-        <Route path="/products" element={<SuspenseWrapper><Products /></SuspenseWrapper>} />
-        <Route path="/reviews" element={<SuspenseWrapper><Reviews /></SuspenseWrapper>} />
-
-        <Route path="/login" element={<SuspenseWrapper><LoginPage /></SuspenseWrapper>} />
-        <Route path="/register" element={<SuspenseWrapper><RegisterPage /></SuspenseWrapper>} />
-        <Route path="/send-otp" element={<SuspenseWrapper><SendOtpPage /></SuspenseWrapper>} />
-        <Route path="/forgot-password" element={<SuspenseWrapper><ForgotPasswordPage /></SuspenseWrapper>} />
-        <Route path="/reset-password" element={<SuspenseWrapper><ResetPasswordPage /></SuspenseWrapper>} />
-
-
-
-
-        <Route path="admin" element={<><Outlet /></>}>
-          <Route index element={withWrapper(<Dashboard />)} />
-          <Route path="company" element={withWrapper(<CompanyPage />)} />
-          <Route path="company/:id" element={withWrapper(<CompanyPage />)} />
-          <Route path="company/table" element={withWrapper(<CompanyTable />)} />
-
-          <Route path='customer' element={withWrapper(<CustomerPage />)} />
-          <Route path="customer/:id" element={withWrapper(<CustomerPage />)} />
-          <Route path="customer/table" element={withWrapper(<CustomerTable />)} />
-          <Route path="customer/history/:customerId" element={withWrapper(<CustomerHistory customerId="" />)} />
-
-          <Route path="supplier" element={withWrapper(<SupplierPage />)} />
-          <Route path="supplier/:id" element={withWrapper(<SupplierPage />)} />
-          <Route path="supplier/table" element={withWrapper(<SupplierTable />)} />
-
-          <Route path="product" element={withWrapper(<ProductPage />)} />
-          <Route path="product/:id" element={withWrapper(<ProductPage />)} />
-          <Route path="product/table" element={withWrapper(<ProductTable />)} />
-          <Route path="delivery" element={withWrapper(<DeliveryPage />)} />
-          <Route path="delivery/table" element={withWrapper(<DeliveryTable />)} />
-
-          <Route path="employee" element={withWrapper(<EmployeePage />)} />
-          <Route path="employee/:id" element={withWrapper(<EmployeePage />)} />
-          <Route path="employee/table" element={withWrapper(<EmployeeTable />)} />
-
-          <Route path="notification-page" element={withWrapper(<NotificationPage />)} />
-          <Route path="bill" element={withWrapper(<PaymentPage />)} />
-
-          <Route path="installment" element={withWrapper(<InstallmentAccordion billNumber="" />)} />
-        </Route>
-        {/* 404 Route */}
-//   <Route path="*" element={<p className="text-center mt-10 text-red-500">404 - Page Not Found</p>} />
-// </Routes > */}

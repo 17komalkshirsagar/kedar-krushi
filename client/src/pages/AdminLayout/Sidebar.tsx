@@ -1,56 +1,5 @@
-// // components/Sidebar.tsx
-// import { Link, useLocation } from "react-router-dom";
-// import {
-//     Home,
-//     Building2,
-//     Users,
-//     Package,
-//     Truck,
-//     UserCircle,
-//     Bell,
-//     CreditCard,
-//     ClipboardList,
-// } from "lucide-react";
 
-// const links = [
-//     { label: "Dashboard", to: "/admin", icon: <Home size={16} /> },
-//     { label: "Company Table", to: "/admin/company/table", icon: <Building2 size={16} /> },
-//     { label: "Customer Table", to: "/admin/customer/table", icon: <Users size={16} /> },
-//     { label: "Product Table", to: "/admin/product/table", icon: <Package size={16} /> },
-//     { label: "Delivery Table", to: "/admin/delivery/table", icon: <Truck size={16} /> },
-//     { label: "Employee Table", to: "/admin/employee/table", icon: <UserCircle size={16} /> },
-//     { label: "Supplier Table", to: "/admin/supplier/table", icon: <Users size={16} /> },
-//     { label: "Notifications", to: "/admin/notification-page", icon: <Bell size={16} /> },
-//     { label: "Bill Payment", to: "/admin/bill", icon: <CreditCard size={16} /> },
-//     { label: "Installments", to: "/admin/installment", icon: <ClipboardList size={16} /> },
-// ];
-
-// export default function Sidebar() {
-//     const location = useLocation();
-
-//     return (
-//         <aside className="w-64 bg-blue-100 p-4 min-h-screen">
-//             <h2 className="text-lg font-bold mb-6">Admin Panel</h2>
-//             <nav className="space-y-2">
-//                 {links.map((item) => (
-//                     <Link
-//                         key={item.to}
-//                         to={item.to}
-//                         className={`flex items-center space-x-2 p-2 rounded-md transition ${location.pathname === item.to
-//                             ? "bg-blue-600 text-white"
-//                             : "hover:bg-blue-300 text-black"
-//                             }`}
-//                     >
-//                         {item.icon}
-//                         <span>{item.label}</span>
-//                     </Link>
-//                 ))}
-//             </nav>
-//         </aside>
-//     );
-// }
-
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
     Home,

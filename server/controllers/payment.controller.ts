@@ -318,3 +318,45 @@ export const getCustomerPaymentHistory = asyncHandler(async (req: Request, res: 
 
     res.status(200).json({ message: "Payment customer payment history successfully", result, totals, purchaseInfo });
 });
+
+
+export const getPaymentDashboardStats = asyncHandler(async (req: Request, res: Response): Promise<any> => {
+    const stats = await Payment.aggregate([
+        {
+            $match: { isDeleted: false, isBlock: false }
+        },
+        {
+            $group: {
+                _id: "$paymentMode",
+                totalAmount: { $sum: "$totalAmount" },
+                totalPaid: { $sum: "$paidAmount" },
+                totalPending: { $sum: "$pendingAmount" },
+                count: { $sum: 1 }
+            }
+        }
+    ]);
+
+    const monthlyStats = await Payment.aggregate([
+        {
+            $match: { isDeleted: false, isBlock: false }
+        },
+        {
+            $group: {
+                _id: {
+                    month: { $month: "$createdAt" },
+                    year: { $year: "$createdAt" }
+                },
+                total: { $sum: "$totalAmount" },
+                paid: { $sum: "$paidAmount" }
+            }
+        },
+        {
+            $sort: { "_id.year": 1, "_id.month": 1 }
+        }
+    ]);
+
+    res.status(200).json({
+        message: "Dashboard Stats Fetched",
+        result: { stats, monthlyStats }
+    });
+});

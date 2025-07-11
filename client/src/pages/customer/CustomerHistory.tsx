@@ -34,6 +34,9 @@ const CustomerHistory = ({ customerId }: { customerId: string }) => {
     const customer = allCustomers?.result?.find(c => c._id === customerId);
 
     const payments = paymentData?.result || [];
+    console.log("payments::", payments);
+
+
     const totals = paymentData?.totals || { totalAmount: 0, paidAmount: 0, pendingAmount: 0 };
     const purchaseInfo = paymentData?.purchaseInfo;
     return (

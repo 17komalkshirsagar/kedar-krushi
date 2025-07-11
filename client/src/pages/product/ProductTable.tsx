@@ -50,6 +50,8 @@ const ProductTable = () => {
     const handleBlockProduct = async (id: string, currentBlockStatus: boolean) => {
         try {
             const response = await blockProduct(id);
+            console.log("response::", response);
+
             toast.success(currentBlockStatus ? 'Product unblocked' : 'Product blocked');
             await refetch();
         } catch (error) {

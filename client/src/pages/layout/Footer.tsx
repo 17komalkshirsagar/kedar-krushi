@@ -11,7 +11,6 @@ import {
   Clock,
   Star,
   ExternalLink,
-  MessageCircle
 } from 'lucide-react';
 import {
   FaInstagram,
