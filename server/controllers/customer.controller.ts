@@ -29,18 +29,9 @@ export const createCustomer = asyncHandler(async (req: Request, res: Response, n
 export const getCustomers = asyncHandler(async (req: Request, res: Response): Promise<any> => {
     const { page = 1, limit = 10, searchQuery = "" } = req.query;
 
-    const sortedQuery = JSON.stringify(Object.fromEntries(Object.entries(req.query).sort()));
-    const cacheKey = `customers:${sortedQuery}`;
-    const cachedData = await redisClient.get(cacheKey);
-
-    if (cachedData) {
-        return res.status(200).json(JSON.parse(cachedData));
-    }
-
     const currentPage = parseInt(page as string);
     const pageLimit = parseInt(limit as string);
     const skip = (currentPage - 1) * pageLimit;
-
 
     const query: any = {
         isDeleted: false,
@@ -71,15 +62,12 @@ export const getCustomers = asyncHandler(async (req: Request, res: Response): Pr
         totalPages,
     };
 
-    await redisClient.setex(
-        cacheKey,
-        3600,
-        JSON.stringify({ message: "Customers fetched successfully", result, pagination })
-    );
-
-    res.status(200).json({ message: "Customers fetched successfully", result, pagination });
+    res.status(200).json({
+        message: "Customers fetched successfully",
+        result,
+        pagination
+    });
 });
-
 
 // Get Customer By ID
 export const getCustomerById = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {

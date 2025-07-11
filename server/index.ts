@@ -35,7 +35,7 @@ app.use(morgan("dev"))
 
 app.use(express.urlencoded({ extended: true }))
 const allowedOrigins = [
-    "http://localhost:3000",
+    "http://localhost:5173",
     "https://kedar-client.vercel.app"
 ];
 
