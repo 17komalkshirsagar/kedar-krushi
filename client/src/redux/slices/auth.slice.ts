@@ -14,30 +14,31 @@ const initialState: InitialState = {
     sessionExpiredOpen: false
 }
 
+
 const authSlice = createSlice({
     name: "authSlice",
     initialState,
     reducers: {
         logoutAdmin: (state) => {
-            state.admin = null
-            localStorage.removeItem("admin")
+            state.admin = null;
         },
         openSessionExpiredModal: (state) => {
-            state.sessionExpiredOpen = true
+            state.sessionExpiredOpen = true;
         },
         closeSessionExpiredModal: (state) => {
-            state.sessionExpiredOpen = false
+            state.sessionExpiredOpen = false;
         }
     },
-    extraReducers: builder => builder
-
+    extraReducers: (builder) => builder
         .addMatcher(authApi.endpoints.signIn.matchFulfilled, (state, { payload }) => {
-            state.admin = payload.result
+            state.admin = payload.result;
         })
         .addMatcher(authApi.endpoints.signOut.matchFulfilled, (state) => {
-            state.admin = null
+            state.admin = null;
+            localStorage.removeItem("admin");
         })
-})
+});
+
 
 export const {
     logoutAdmin,
