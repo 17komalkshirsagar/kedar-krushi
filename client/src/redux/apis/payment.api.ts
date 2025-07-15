@@ -125,7 +125,17 @@ export const paymentApi = createApi({
             providesTags: ["payment"],
         }),
 
-
+        getPaymentDashboardStats: builder.query<
+            { message: string; result: { stats: any[]; monthlyStats: any[] } },
+            void
+        >({
+            query: () => ({
+                url: "/payment/state",
+                method: "GET",
+            }),
+            transformResponse: (response: { message: string; result: { stats: any[]; monthlyStats: any[] } }) => response,
+            transformErrorResponse: (error: { status: number; data: { message: string } }) => error.data?.message,
+        }),
     }),
 });
 
@@ -136,5 +146,7 @@ export const {
     useUpdatePaymentMutation,
     useDeletePaymentMutation,
     useUpdatePaymentStatusMutation,
-    useBlockPaymentMutation, useGetCustomerPaymentHistoryQuery, useGetCustomerPaymentSummaryQuery
+    useBlockPaymentMutation, useGetCustomerPaymentHistoryQuery,
+    useGetPaymentDashboardStatsQuery,
+    useGetCustomerPaymentSummaryQuery
 } = paymentApi;

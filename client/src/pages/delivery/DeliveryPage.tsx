@@ -147,11 +147,11 @@ const DeliveryPage = () => {
                                     Failed
                                 </label>
                                 <label className="flex items-center gap-2">
-                                    <input type="radio" value="Failed" {...register('status')} />
+                                    <input type="radio" value="Shipped" {...register('status')} />
                                     Cancelled
                                 </label>
                                 <label className="flex items-center gap-2">
-                                    <input type="radio" value="Failed" {...register('status')} />
+                                    <input type="radio" value="Shipped" {...register('status')} />
                                     Shipped
                                 </label>
                             </div>
@@ -160,7 +160,7 @@ const DeliveryPage = () => {
 
                         {/* Buttons */}
                         <div className="flex justify-end gap-3 pt-4">
-                            <Button type="button" className="bg-red-600 text-white border border-gray-300" onClick={() => reset()}>
+                            <Button type="button" className="bg-red-600" onClick={() => reset()}>
                                 Cancel
                             </Button>
                             <Button className="bg-green-600 text-white" type="submit" disabled={isLoading}>

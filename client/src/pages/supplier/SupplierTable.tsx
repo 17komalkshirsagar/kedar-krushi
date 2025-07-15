@@ -115,7 +115,7 @@ const SupplierTable = () => {
                 return (
                     <div className="flex gap-3">
                         <button
-                            onClick={() => navigate(`/admin/supplier-page/${row.original._id}`)}
+                            onClick={() => navigate(`/admin/supplier/${row.original._id}`)}
                             className="text-blue-600"
                         >
                             Edit
@@ -142,7 +142,7 @@ const SupplierTable = () => {
         fetchData();
     }, [isSuccess, searchData]);
 
-    if (isLoading) return <Loader />;
+    ;
     useEffect(() => {
         if (isBlockSuccess) {
             toast.success("Supplier blocked successfully");
@@ -174,7 +174,7 @@ const SupplierTable = () => {
 
         }
     }, [isDeleteLoading]);
-
+    if (isLoading) return <Loader />
     return (
         <>
             {statusUpdateSuccess && <Toast type="success" message={statusMessage?.message} />}
@@ -194,7 +194,7 @@ const SupplierTable = () => {
                         className="border px-3 py-1 rounded-md"
                     />
                     <button
-                        onClick={() => navigate('/admin/supplier-page')}
+                        onClick={() => navigate('/admin/supplier')}
                         className="bg-indigo-600 text-white px-4 py-2 rounded-md"
                     >
                         Add

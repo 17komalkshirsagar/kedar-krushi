@@ -70,16 +70,16 @@ const SupplierPage = () => {
     useEffect(() => {
         if (isAddSuccess) {
             toast.success('Supplier created successfully');
-            navigate('/admin/supplier-table');
+            navigate('/admin/supplier/table');
         }
     }, [isAddSuccess, navigate]);
 
     useEffect(() => {
         if (isUpdateSuccess) {
             toast.success('Supplier updated successfully');
-            navigate('/admin/supplier-table');
+            navigate('/admin/supplier/table');
         }
-    }, [isUpdateSuccess]);
+    }, [isUpdateSuccess, navigate]);
 
     useEffect(() => {
         if (isAddError) {
@@ -135,10 +135,10 @@ const SupplierPage = () => {
 
 
                         <div className="flex justify-end gap-3 pt-4">
-                            <Button className="bg-red-600" type="button" variant="outline" onClick={() => reset()}>
+                            <Button className="bg-red-600 text-white" type="button" variant="outline" onClick={() => reset()}>
                                 Cancel
                             </Button>
-                            <Button className="bg-green-700" type="submit" disabled={isLoading}>
+                            <Button className="bg-green-600 text-white" type="submit" disabled={isLoading}>
                                 {id ? 'Update' : 'Save'}
                             </Button>
                         </div>

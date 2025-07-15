@@ -11,14 +11,16 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "./../../components/ui/tabs";
 import { Card, CardHeader, CardTitle, CardContent } from "./../../components/ui/card";
 import { useGetProductDashbaordStatsQuery } from "../../redux/apis/product.api";
+import { useGetPaymentDashboardStatsQuery } from "../../redux/apis/payment.api";
 
 const Dashboard = () => {
     const [type, setType] = useState("monthly");
-    const { data, isLoading } = useGetProductDashbaordStatsQuery(type);
+
+    const { data: productData, isLoading: isProductLoading } = useGetProductDashbaordStatsQuery(type);
+    const { data: paymentData, isLoading: isPaymentLoading } = useGetPaymentDashboardStatsQuery();
 
     return (
-        <div className="p-4 space-y-3">
-
+        <div className="p-4 space-y-4">
             <Tabs defaultValue="monthly" onValueChange={setType}>
                 <TabsList>
                     <TabsTrigger value="daily">Daily</TabsTrigger>
@@ -28,17 +30,17 @@ const Dashboard = () => {
                 </TabsList>
             </Tabs>
 
-            {/* Chart Card */}
+            {/* Product Stats Chart */}
             <Card className="shadow-md">
                 <CardHeader>
                     <CardTitle>Product Statistics ({type.toUpperCase()})</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    {isLoading ? (
-                        <p className="text-gray-500">Loading chart...</p>
+                    {isProductLoading ? (
+                        <p className="text-gray-500">Loading product stats...</p>
                     ) : (
-                        <ResponsiveContainer width="100%" height={400}>
-                            <BarChart data={data?.result || []}>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={productData?.result || []}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="_id" />
                                 <YAxis />
@@ -47,6 +49,31 @@ const Dashboard = () => {
                                 <Bar dataKey="totalStock" fill="#10b981" name="Stock" />
                             </BarChart>
                         </ResponsiveContainer>
+                    )}
+                </CardContent>
+            </Card>
+
+            {/* Payment Stats Chart */}
+            <Card className="shadow-md">
+                <CardHeader>
+                    <CardTitle>Payment Mode Statistics</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {isPaymentLoading ? (
+                        <p className="text-gray-500">Loading payment stats...</p>
+                    ) : (
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={paymentData?.result.stats || []}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="_id" />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey="totalAmount" fill="#6366f1" name="Total Amount" />
+                                <Bar dataKey="totalPaid" fill="#10b981" name="Total Paid" />
+                                <Bar dataKey="totalPending" fill="#f97316" name="Pending Amount" />
+                            </BarChart>
+                        </ResponsiveContainer>
+
                     )}
                 </CardContent>
             </Card>

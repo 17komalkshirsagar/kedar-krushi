@@ -99,13 +99,14 @@ const App = () => {
           <Route path="product/table" element={withWrapper(<ProductTable />)} />
 
           <Route path="delivery" element={withWrapper(<DeliveryPage />)} />
+          <Route path="delivery/:id" element={withWrapper(<DeliveryPage />)} />
           <Route path="delivery/table" element={withWrapper(<DeliveryTable />)} />
 
           <Route path="employee" element={withWrapper(<EmployeePage />)} />
           <Route path="employee/:id" element={withWrapper(<EmployeePage />)} />
           <Route path="employee/table" element={withWrapper(<EmployeeTable />)} />
 
-          <Route path="notification-page" element={withWrapper(<NotificationPage />)} />
+          <Route path="notification" element={withWrapper(<NotificationPage />)} />
           <Route path="bill" element={withWrapper(<PaymentPage />)} />
           <Route path="installment" element={withWrapper(<InstallmentAccordion billNumber="" />)} />
         </Route>

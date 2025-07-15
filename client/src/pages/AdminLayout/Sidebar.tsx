@@ -10,7 +10,7 @@ import {
     UserCircle,
     Bell,
     CreditCard,
-    ClipboardList, LogOut,
+    LogOut,
     ChevronsLeft,
     ChevronsRight,
 } from "lucide-react";
@@ -24,9 +24,9 @@ const links = [
     { label: "Delivery Table", to: "/admin/delivery/table", icon: <Truck size={22} /> },
     { label: "Employee Table", to: "/admin/employee/table", icon: <UserCircle size={22} /> },
     { label: "Supplier Table", to: "/admin/supplier/table", icon: <Users size={22} /> },
-    { label: "Notifications", to: "/admin/notification-page", icon: <Bell size={22} /> },
+    { label: "Notifications", to: "/admin/notification", icon: <Bell size={22} /> },
     { label: "Bill Payment", to: "/admin/bill", icon: <CreditCard size={22} /> },
-    { label: "Installments", to: "/admin/installment", icon: <ClipboardList size={22} /> },
+    // { label: "Installments", to: "/admin/installment", icon: <ClipboardList size={22} /> },
     { label: "Logout", to: "/logout", icon: <LogOut size={22} className="text-red-600" /> },
 ];
 

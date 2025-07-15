@@ -98,7 +98,7 @@ const DeliveryTable = () => {
                 return (
                     <div className="flex gap-3">
                         <button
-                            onClick={() => navigate(`/delivery-page/${row.original._id}`)}
+                            onClick={() => navigate(`/admin/delivery/${row.original._id}`)}
                             className="text-blue-600"
                         >
                             Edit
@@ -146,7 +146,7 @@ const DeliveryTable = () => {
                         className="border px-3 py-1 rounded-md"
                     />
                     <button
-                        onClick={() => navigate('/delivery/add')}
+                        onClick={() => navigate('/admin/delivery')}
                         className="bg-indigo-600 text-white px-4 py-2 rounded-md"
                     >
                         Add

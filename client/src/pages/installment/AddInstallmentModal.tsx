@@ -200,39 +200,7 @@ const AddInstallmentModal = ({
                             )}
                         </div>
 
-                        {/* <div>
-                            <Label className="block text-sm font-medium text-gray-700 mb-1">
-                                Select Payment Mode
-                            </Label>
-                            <Controller
-                                name="paymentMode"
-                                control={control}
-                                defaultValue={payment?.paymentMode || "Cash"}
-                                rules={{ required: "Select payment mode" }}
-                                render={({ field }) => (
-                                    <RadioGroup
-                                        onValueChange={field.onChange}
-                                        value={field.value}
-                                        className="flex flex-wrap gap-4"
-                                    >
-                                        {["Cash", "UPI", "Bank Transfer", "Credit", "Other"].map((mode) => (
-                                            <div key={mode} className="flex items-center gap-2">
-                                                <RadioGroupItem value={mode} id={mode} />
-                                                <Label htmlFor={mode} className="text-sm">
-                                                    {mode}
-                                                </Label>
-                                            </div>
-                                        ))}
-                                    </RadioGroup>
-                                )}
-                            />
-                            {errors.paymentMode && (
-                                <p className="text-red-500 text-sm mt-1">
-                                    {errors.paymentMode.message as string}
-                                </p>
-                            )}
 
-                        </div> */}
 
 
                         <div>

@@ -153,7 +153,7 @@ const CustomerTable = () => {
                 return (
                     <div className="flex gap-3">
                         <button
-                            onClick={() => navigate(`/customer-page/${row.original._id}`)}
+                            onClick={() => navigate(`/admin/customer/${row.original._id}`)}
                             className="text-blue-600"
                         >
                             Edit
@@ -171,7 +171,7 @@ const CustomerTable = () => {
                             {isBlocked ? 'Unblock' : 'Block'}
                         </button>
                         <button
-                            onClick={() => navigate('/admin/notification-page', {
+                            onClick={() => navigate('/admin/notification', {
                                 state: { customerId: row.original._id }
                             })}
                             className="bg-blue-600 text-white px-4 py-2 rounded"
@@ -212,7 +212,7 @@ const CustomerTable = () => {
                         className="border px-3 py-1 rounded-md"
                     />
                     <button
-                        onClick={() => navigate('/admin/customer/add')}
+                        onClick={() => navigate('/admin/customer')}
                         className="bg-indigo-600 text-white px-4 py-2 rounded-md"
                     >
                         Add

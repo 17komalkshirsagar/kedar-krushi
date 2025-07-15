@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -164,6 +164,20 @@ const ProductPage = () => {
             addProduct(payload as any);
         }
     };
+    const supplierOptions = useMemo(() => {
+        return data?.result?.map((supplier) => (
+            <option key={supplier._id} value={supplier._id}>
+                {supplier.name}
+            </option>
+        ));
+    }, [data]);
+    const companyOptions = useMemo(() => {
+        return companyData?.result?.map((company) => (
+            <option key={company._id} value={company._id}>
+                {company.name}
+            </option>
+        ));
+    }, [companyData]);
 
     return (
         <div className="max-w-3xl mx-auto py-8">
@@ -208,11 +222,12 @@ const ProductPage = () => {
                                 <Label htmlFor="company">Company</Label>
                                 <select id="company" {...register('company')} className="w-full border rounded px-3 py-2">
                                     <option value="">Select Company</option>
-                                    {companyData?.result?.map((company) => (
+                                    {/* {companyData?.result?.map((company) => (
                                         <option key={company._id} value={company._id}>
                                             {company.name}
                                         </option>
-                                    ))}
+                                    ))} */}
+                                    {companyOptions}
                                 </select>
                             </div>
                         </div>
@@ -310,11 +325,12 @@ const ProductPage = () => {
                                 <Label htmlFor="supplier">Supplier</Label>
                                 <select id="supplier" {...register('supplier')} className="w-full border rounded px-3 py-2">
                                     <option value="">Select Supplier</option>
-                                    {data?.result?.map((supplier) => (
-                                        <option key={supplier._id} value={supplier._id}>
-                                            {supplier.name}
-                                        </option>
-                                    ))}
+                                    {/* {data?.result?.map((supplier) => ( */}
+                                    {/* // <option key={supplier._id} value={supplier._id}>
+                                        //     {supplier.name}
+                                        // </option> */}
+                                    {/* ))} */}
+                                    {supplierOptions}
                                 </select>
                             </div>
 

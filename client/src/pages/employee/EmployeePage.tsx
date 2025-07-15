@@ -81,14 +81,14 @@ const EmployeePage = () => {
     useEffect(() => {
         if (isAddSuccess) {
             toast.success('Employee created successfully');
-            navigate('/admin/employee-table');
+            navigate('/admin/employee/table');
         }
     }, [isAddSuccess, navigate]);
 
     useEffect(() => {
         if (isUpdateSuccess) {
             toast.success('Employee updated successfully');
-            navigate('/admin/employee-table');
+            navigate('/admin/employee/table');
         }
     }, [isUpdateSuccess]);
 
